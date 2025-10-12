@@ -31,6 +31,7 @@ import android.view.Display;
 import android.view.Display.HdrCapabilities;
 
 import org.lineageos.settings.thermal.ThermalUtils;
+import org.lineageos.settings.resolution.ResolutionUtils;
 import org.lineageos.settings.refreshrate.RefreshUtils;
 import org.lineageos.settings.utils.FileUtils;
 
@@ -48,6 +49,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         ThermalUtils.startService(context);
         RefreshUtils.startService(context);
         overrideHdrTypes(context);
+        ResolutionUtils.startService(context);
 
         // DC Dimming
         FileUtils.enableService(context);
