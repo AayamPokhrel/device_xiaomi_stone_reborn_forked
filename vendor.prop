@@ -1,3 +1,7 @@
+#
+# system.prop for POCO X5 5G / Redmi Note 12 5G
+#
+
 # Audio
 persist.vendor.audio.ambisonic.auto.profile=false
 persist.vendor.audio.ambisonic.capture=false
@@ -83,7 +87,36 @@ vendor.audio.use.sw.mpegh.decoder=true
 vendor.audio.volume.headset.gain.depcal=true
 vendor.voice.path.for.pcm.voip=true
 
-# Bluetooth
+# Bluetooth / Wireless
+bluetooth.profile.a2dp.source.enabled=true
+bluetooth.profile.asha.central.enabled=true
+bluetooth.profile.avrcp.controller.enabled=false
+bluetooth.profile.avrcp.target.enabled=true
+bluetooth.profile.bap.broadcast.assist.enabled=false
+bluetooth.profile.bap.broadcast.source.enabled=false
+bluetooth.profile.bap.unicast.client.enabled=false
+bluetooth.profile.bas.client.enabled=true
+bluetooth.profile.ccp.server.enabled=false
+bluetooth.profile.csip.set_coordinator.enabled=true
+bluetooth.profile.gatt.enabled=true
+bluetooth.profile.hap.client.enabled=true
+bluetooth.profile.hfp.ag.enabled=true
+bluetooth.profile.hid.device.enabled=true
+bluetooth.profile.hid.host.enabled=true
+bluetooth.profile.map.server.enabled=true
+bluetooth.profile.mcp.server.enabled=true
+bluetooth.profile.opp.enabled=true
+bluetooth.profile.pan.nap.enabled=true
+bluetooth.profile.pan.panu.enabled=true
+bluetooth.profile.pbap.server.enabled=true
+bluetooth.profile.sap.server.enabled=false
+bluetooth.profile.vcp.controller.enabled=false
+bluetooth.profile.leaudio.enabled=true
+bluetooth.profile.volume.control.enabled=true
+bluetooth.profile.bass.client.enabled=true
+bluetooth.profile.battery.enabled=true
+
+# Bluetooth (Qualcomm Vendor)
 persist.bluetooth.a2dp_offload.disabled=false
 persist.vendor.bluetooth.modem_nv_support=true
 persist.vendor.bt.aac_frm_ctl.enabled=true
@@ -95,9 +128,6 @@ persist.vendor.qcom.bluetooth.scram.enabled=false
 persist.vendor.qcom.bluetooth.twsp_state.enabled=false
 ro.bluetooth.a2dp_offload.supported=true
 ro.vendor.bluetooth.wipower=false
-
-# Camera
-camera.disable_zsl_mode=true
 
 # Display
 ro.surface_flinger.enable_frame_rate_override=false
@@ -170,13 +200,9 @@ persist.sys.sf.color_saturation=1.0
 persist.sys.sf.native_mode=0
 ro.hardware.egl=adreno
 ro.hardware.vulkan=adreno
-ro.opengles.version=196610
 vendor.gralloc.disable_ubwc=0
 vendor.gralloc.secure_preview_buffer_format=420_sp
 vendor.gralloc.secure_preview_only=1
-
-# Incremental FS
-ro.incremental.enable=true
 
 # LMKD
 ro.lmk.kill_heaviest_task=true
@@ -189,11 +215,11 @@ vendor.netflix.bsp_rev=Q4350-32962-1
 # NFC
 ro.vendor.nfc.repair=1
 ro.vendor.se.type=HCE,UICC
+ro.nfc.port=I2C
 
-# RIL
+# Radio / RIL
 persist.radio.multisim.config=dsds
 persist.vendor.radio.apm_sim_not_pwdn=1
-persist.vendor.radio.atfwd.start=true
 persist.vendor.radio.custom_ecc=1
 persist.vendor.radio.enableadvancedscan=true
 persist.vendor.radio.enable_temp_dds=true
@@ -212,7 +238,7 @@ persist.vendor.sensors.hal_trigger_ssr=false
 persist.vendor.sensors.support_direct_channel=false
 persist.vendor.sensors.sync_request=true
 
-# SoC
+# SoC / Identity
 ro.boot.product.vendor.sku=holi
 ro.soc.manufacturer=QTI
 
