@@ -34,6 +34,7 @@ import org.lineageos.settings.thermal.ThermalUtils;
 import org.lineageos.settings.resolution.ResolutionUtils;
 import org.lineageos.settings.refreshrate.RefreshUtils;
 import org.lineageos.settings.utils.FileUtils;
+import org.lineageos.settings.dirac.DiracUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final boolean DEBUG = false;
@@ -46,6 +47,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (DEBUG)
             Log.d(TAG, "Received boot completed intent");
+ 
+        try {
+            DiracUtils.getInstance(context);
+        } catch (Exception e) {
+            Log.d(TAG, "Dirac is not present in system");
+        }
+ 
         ThermalUtils.startService(context);
         RefreshUtils.startService(context);
         overrideHdrTypes(context);
