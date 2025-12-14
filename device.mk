@@ -315,7 +315,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     FrameworkOverlayMoonstone \
-    FrameworkOverlaySunstone
+    FrameworkOverlaySunstone \
+    LauncherOverlayStone
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/overlay/config-odm.xml:$(TARGET_COPY_OUT_ODM)/overlay/config/config.xml \
