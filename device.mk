@@ -428,7 +428,8 @@ PRODUCT_COPY_FILES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    android.hardware.sensors-service.xiaomi-multihal
+    android.hardware.sensors-service.xiaomi-multihal \
+    sensors.dynamic_sensor_hal
 
 PRODUCT_PACKAGES += \
     android.frameworks.sensorservice@1.0.vendor \
