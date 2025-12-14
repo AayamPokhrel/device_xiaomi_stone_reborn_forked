@@ -243,6 +243,8 @@ PRODUCT_PACKAGES += \
     video_system_specs_blair.json \
     video_system_specs_blair_lite.json
 
+$(call soong_config_set_bool,stagefright,target_disable_thumbnail_block_model,true)
+
 # Net
 PRODUCT_PACKAGES += \
     android.system.net.netd@1.1.vendor \
