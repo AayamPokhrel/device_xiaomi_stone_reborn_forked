@@ -279,6 +279,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     FrameworkOverlayTarget \
+    NfcOverlayTarget \
     SettingsOverlayTarget \
     SettingsProviderOverlayTarget \
     SystemUIOverlayTarget \
