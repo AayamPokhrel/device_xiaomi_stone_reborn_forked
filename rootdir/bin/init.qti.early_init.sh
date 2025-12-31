@@ -39,7 +39,13 @@ soc_id="$(cat /sys/devices/soc0/soc_id 2>/dev/null)"
 [ -n "$soc_id" ] && setprop ro.vendor.qti.soc_id "$soc_id"
 
 case "$soc_id" in
-  507) setprop ro.vendor.qti.soc_model SM6375 ;;
-  578) setprop ro.vendor.qti.soc_model SM4375 ;;
+  507)
+      setprop ro.vendor.qti.soc_model SM6375
+      setprop ro.soc.model "Snapdragon 695"
+      ;;
+  578)
+      setprop ro.vendor.qti.soc_model SM4375
+      setprop ro.soc.model "Snapdragon 4 Gen 1"
+      ;;
   *) ;;
 esac
