@@ -406,7 +406,6 @@ PRODUCT_PACKAGES += \
     fstab.default
   
 PRODUCT_PACKAGES += \
-    init.class_main.sh \
     init.kernel.post_boot.sh \
     init.class_main.sh \
     init.qcom.early_boot.sh \
