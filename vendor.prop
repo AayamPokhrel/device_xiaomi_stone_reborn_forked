@@ -183,14 +183,9 @@ persist.vendor.fingerprint.sensor_location=1080|960|200|local:463094721874656883
 persist.vendor.fingerprint.sensor_modules=fpc,goodix
 
 # Graphics
-debug.sf.enable_advanced_sf_phase_offset=1
 debug.sf.enable_gl_backpressure=0
 debug.sf.disable_backpressure=1
 debug.sf.frame_rate_multiple_threshold=60
-debug.sf.high_fps_early_gl_phase_offset_ns=-4000000
-debug.sf.high_fps_early_phase_offset_ns=-4000000
-debug.sf.high_fps_late_app_phase_offset_ns=1000000
-debug.sf.high_fps_late_sf_phase_offset_ns=-4000000
 debug.sf.auto_latch_unsignaled=0
 debug.renderengine.backend=skiaglthreaded
 debug.sf.defer_refresh_rate_when_off=1
