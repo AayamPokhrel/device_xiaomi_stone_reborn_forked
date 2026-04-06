@@ -101,17 +101,37 @@ function configure_memory_parameters() {
         
     # Spawn 1 kswapd threads which can help in fast reclaiming of pages
     echo 1 > /proc/sys/vm/kswapd_threads
+
+    echo 10 > /proc/sys/vm/dirty_ratio
+    echo 5  > /proc/sys/vm/dirty_background_ratio
+    echo 50 > /proc/sys/vm/vfs_cache_pressure
 }
 
 # configure governor settings for silver cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+echo 1324800 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+echo 80      > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
 
 # configure governor settings for gold cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
+echo 1401600 > /sys/devices/system/cpu/cpufreq/policy6/schedutil/hispeed_freq
+echo 85      > /sys/devices/system/cpu/cpufreq/policy6/schedutil/hispeed_load
 
 echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 
+echo 35 > /proc/sys/kernel/sched_min_task_util_for_boost
+echo 35 > /proc/sys/kernel/sched_min_task_util_for_colocation
+
+for cpu in 0 1 2 3 4 5; do
+  echo -3 > /sys/devices/system/cpu/cpu${cpu}/sched_load_boost
+done
+for cpu in 6 7; do
+  echo 5 > /sys/devices/system/cpu/cpu${cpu}/sched_load_boost
+done
+
 configure_memory_parameters
+
+echo 0 > /proc/sys/kernel/sched_boost
 
 # Let kernel know our image version/variant/crm_version
 if [ -f /sys/devices/soc0/select_image ]; then
