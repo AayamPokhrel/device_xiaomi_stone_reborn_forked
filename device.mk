@@ -92,6 +92,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 $(LOCAL_PATH)/rootdir/etc/init.axion.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.axion.rc
 
+# Enable debugging
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.ax_debug_enabled=1
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1.vendor \
