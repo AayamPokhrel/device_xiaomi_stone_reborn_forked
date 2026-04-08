@@ -12,6 +12,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from device.
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 
+TARGET_DISABLE_EPPE := true
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
@@ -31,3 +32,11 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     BuildDesc="sunstone_global-user 14 UKQ1.240624.001 OS2.0.5.0.UMQMIXM release-keys" \
     BuildFingerprint=Redmi/sunstone_global/sunstone:14/UKQ1.240624.001/OS2.0.5.0.UMQMIXM:user/release-keys \
     DeviceProduct=sunstone
+    
+#Optional flags
+# Camera information
+AXION_CAMERA_REAR_INFO := 48,8,1.9
+AXION_CAMERA_FRONT_INFO := 13.2
+
+# Maintainer name
+AXION_MAINTAINER := AayamPokhrel

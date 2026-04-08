@@ -16,8 +16,20 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 
-# Call the ViperFX Config
-$(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
+# Axion
+TARGET_ENABLE_BLUR := true
+TARGET_INCLUDE_AXFX := true
+BYPASS_CHARGE_SUPPORTED := false #(use from kami stuffs)
+#BYPASS_CHARGE_TOGGLE_PATH := /sys/class/power_supply/battery/input_current_limit
+#BYPASS_CHARGE_LEVEL_PATH := /sys/class/power_supply/battery/charge_control_limit
+PERF_GOV_SUPPORTED := true
+PERF_DEFAULT_GOV := schedutil
+PERF_ANIM_OVERRIDE := false
+HBM_SUPPORTED := true
+HBM_NODE := /sys/devices/platform/soc/5e00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/hbm
+TARGET_IS_LOW_RAM := false
+TARGET_SUPPORTED_REFRESH_RATES := 60,90,120
+TARGET_NEEDS_DOZE_FIX := false
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
@@ -75,6 +87,10 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/$(AUDIO_SKU_DIR)/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/$(AUDIO_SKU_DIR)/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/$(AUDIO_SKU_DIR)/usb_audio_policy_configuration.xml \
+
+# Axion
+PRODUCT_COPY_FILES += \
+$(LOCAL_PATH)/rootdir/etc/init.axion.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.axion.rc
 
 # Bluetooth
 PRODUCT_PACKAGES += \

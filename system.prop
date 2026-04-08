@@ -57,6 +57,10 @@ persist.audio.fluence.speaker=true
 persist.backup.ntpServer="0.pool.ntp.org"
 persist.timed.enable=true
 
+# Scroll Optimizer
+persist.sys.perf.scroll_opt=true
+persist.sys.perf.scroll_opt.heavy_app=1
+
 # Storage
 persist.fuse_sdcard=true
 persist.sys.fuse.passthrough.enable=true
