@@ -55,6 +55,9 @@
 # Sensors
 /vendor/bin/hw/android\.hardware\.sensors-service\.xiaomi-multihal             u:object_r:hal_sensors_default_exec:s0
 
+# Stereospeaker mod
+/vendor/etc/audio/sku_holi/mixer_paths_stereo_qrdsku1\.xml		       u:object_r:vendor_configs_file:s0
+
 # Thermal
 /data/vendor/thermal(/.*)?                                                     u:object_r:thermal_data_file:s0
 /vendor/bin/mi_thermald                                                        u:object_r:mi_thermald_exec:s0

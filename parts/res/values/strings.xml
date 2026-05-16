@@ -268,4 +268,15 @@
     <string name="music_headset_scenario_video">Video</string>
     <string name="music_headset_scenario_vocal">Voice</string>
 
+    <!-- Stereo Speaker -->
+    <string name="stereo_speaker_title">Stereo Speaker</string>
+    <string name="stereo_speaker_summary">Use the earpiece as a secondary speaker for stereo audio output</string>
+    <string name="stereo_speaker_warning_title">Warning</string>
+    <string name="stereo_speaker_warning_message">Using the earpiece as a speaker at maximum volume for extended periods may damage it. Use at your own risk.</string>
+    <string name="stereo_speaker_warning_enable">Enable anyway</string>
+    <string name="stereo_speaker_restart_title">Restart required</string>
+    <string name="stereo_speaker_restart_message">A restart is required to apply changes. Restart now?</string>
+    <string name="stereo_speaker_restart_now">Restart now</string>
+    <string name="stereo_speaker_restart_later">Later</string>
+
 </resources>

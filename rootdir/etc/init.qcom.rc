@@ -755,3 +755,7 @@ on property:vendor.post_boot.parsed=1
 # Networking
     write /proc/sys/net/core/default_qdisc fq
     write /proc/sys/net/ipv4/tcp_congestion_control bbr
+
+# Stereospeaker mod
+on property:persist.sys.stereo_speaker=1
+    mount none /vendor/etc/audio/sku_holi/mixer_paths_stereo_qrdsku1.xml /vendor/etc/audio/sku_holi/mixer_paths_qrdsku1.xml bind
