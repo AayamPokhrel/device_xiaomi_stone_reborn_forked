@@ -14,6 +14,10 @@ persist.vendor.radio.atfwd.start=true
 
 # Dalvik / ART
 dalvik.vm.dex2oat64.enabled=true
+pm.dexopt.install=quicken
+pm.dexopt.bg-dexopt=speed-profile
+pm.dexopt.boot-after-ota=verify
+pm.dexopt.first-boot=quicken
 
 # Audio / Media (Generic)
 qcom.hw.aac.encoder=true
