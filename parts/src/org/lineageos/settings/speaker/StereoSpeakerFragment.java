@@ -21,12 +21,12 @@ import android.os.Bundle;
 import android.os.SystemProperties;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 import androidx.preference.TwoStatePreference;
 
 import org.lineageos.settings.R;
 
-public class StereoSpeakerFragment extends PreferenceFragment implements
+public class StereoSpeakerFragment extends SettingsBasePreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private static final String PREF_STEREO_SPEAKER = "stereo_speaker_pref";
@@ -36,7 +36,7 @@ public class StereoSpeakerFragment extends PreferenceFragment implements
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.stereo_speaker_settings);
+        setPreferencesFromResource(R.xml.stereo_speaker_settings, rootKey);
 
         mStereoSpeakerPref = (TwoStatePreference) findPreference(PREF_STEREO_SPEAKER);
         mStereoSpeakerPref.setChecked(

@@ -19,7 +19,7 @@ package org.lineageos.settings.kamisstuff;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 import org.lineageos.settings.R;
 import org.lineageos.settings.corecontrol.CoreControlActivity;
 import org.lineageos.settings.fastcharge.FastChargeActivity;
@@ -28,7 +28,7 @@ import org.lineageos.settings.useless.UselessActivity;
 import org.lineageos.settings.kernelmanager.KernelManagerActivity;
 import org.lineageos.settings.gpumanager.GpuManagerActivity;
 
-public class KamisStuffFragment extends PreferenceFragment {
+public class KamisStuffFragment extends SettingsBasePreferenceFragment {
 
     private static final String KEY_CORE_CONTROL = "core_control";
     private static final String KEY_FAST_CHARGE = "fast_charge";
