@@ -157,6 +157,9 @@ public class AutoHBMService extends Service {
         super.onDestroy();
         unregisterReceiver(mScreenStateReceiver);
         deactivateLightSensorRead();
+        if (mExecutorService != null) {
+            mExecutorService.shutdownNow();
+        }
     }
 
     @Override

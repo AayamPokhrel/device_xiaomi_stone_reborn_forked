@@ -12,6 +12,8 @@ package org.lineageos.settings.gpumanager;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.widget.Toast;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -40,6 +42,8 @@ public class GpuManagerFragment extends SettingsBasePreferenceFragment
     
     private GpuManagerUtils mGpuUtils;
     private Handler mHandler;
+    private Handler mBackgroundHandler;
+    private HandlerThread mHandlerThread;
     private Runnable mUpdateRunnable;
     
     // Preferences
@@ -62,6 +66,10 @@ public class GpuManagerFragment extends SettingsBasePreferenceFragment
         mGpuUtils = new GpuManagerUtils();
         mHandler = new Handler();
         
+        mHandlerThread = new HandlerThread("GpuUpdates");
+        mHandlerThread.start();
+        mBackgroundHandler = new Handler(mHandlerThread.getLooper());
+
         initializePreferences();
         loadCurrentSettings();
         startPeriodicUpdates();
@@ -71,6 +79,9 @@ public class GpuManagerFragment extends SettingsBasePreferenceFragment
     public void onDestroy() {
         super.onDestroy();
         stopPeriodicUpdates();
+        if (mHandlerThread != null) {
+            mHandlerThread.quit();
+        }
     }
 
     private void initializePreferences() {
@@ -209,38 +220,47 @@ public class GpuManagerFragment extends SettingsBasePreferenceFragment
     }
 
     private void updateDynamicInfo() {
-        // Update current frequency
-        if (mCurrentFreqPreference != null) {
-            String currentFreq = mGpuUtils.getCurrentFrequency();
-            if (!currentFreq.equals("0")) {
-                int freqMhz = Integer.parseInt(currentFreq) / 1000000;
-                mCurrentFreqPreference.setSummary(freqMhz + " MHz");
-            } else {
-                mCurrentFreqPreference.setSummary("Unknown");
-            }
-        }
-        
-        // Update GPU busy percentage
-        if (mGpuBusyPreference != null) {
-            String busyPercentage = mGpuUtils.getGpuBusyPercentage();
-            mGpuBusyPreference.setSummary(busyPercentage);
-        }
-        
-        // Update GPU temperature
-        if (mGpuTemperaturePreference != null) {
-            String temperature = mGpuUtils.getGpuTemperature();
-            if (!temperature.equals("0")) {
-                mGpuTemperaturePreference.setSummary(temperature + "°C");
-            } else {
-                mGpuTemperaturePreference.setSummary("Unknown");
-            }
-        }
-        
-        // Update thermal power level
-        if (mThermalPowerLevelPreference != null) {
-            String thermalLevel = mGpuUtils.getThermalPowerLevel();
-            mThermalPowerLevelPreference.setSummary("Level " + thermalLevel);
-        }
+        mBackgroundHandler.post(() -> {
+            // Update current frequency
+            final String currentFreq = mGpuUtils.getCurrentFrequency();
+            final String busyPercentage = mGpuUtils.getGpuBusyPercentage();
+            final String temperature = mGpuUtils.getGpuTemperature();
+            final String thermalLevel = mGpuUtils.getThermalPowerLevel();
+
+            mHandler.post(() -> {
+                if (mCurrentFreqPreference != null) {
+                    if (!currentFreq.equals("0")) {
+                        try {
+                            int freqMhz = Integer.parseInt(currentFreq) / 1000000;
+                            mCurrentFreqPreference.setSummary(freqMhz + " MHz");
+                        } catch (NumberFormatException e) {
+                            mCurrentFreqPreference.setSummary("Unknown");
+                        }
+                    } else {
+                        mCurrentFreqPreference.setSummary("Unknown");
+                    }
+                }
+
+                // Update GPU busy percentage
+                if (mGpuBusyPreference != null) {
+                    mGpuBusyPreference.setSummary(busyPercentage);
+                }
+
+                // Update GPU temperature
+                if (mGpuTemperaturePreference != null) {
+                    if (!temperature.equals("0")) {
+                        mGpuTemperaturePreference.setSummary(temperature + "°C");
+                    } else {
+                        mGpuTemperaturePreference.setSummary("Unknown");
+                    }
+                }
+
+                // Update thermal power level
+                if (mThermalPowerLevelPreference != null) {
+                    mThermalPowerLevelPreference.setSummary("Level " + thermalLevel);
+                }
+            });
+        });
     }
 
     private void startPeriodicUpdates() {

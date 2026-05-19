@@ -20,6 +20,9 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.SystemProperties;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import androidx.preference.Preference;
 import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 import androidx.preference.TwoStatePreference;
@@ -32,6 +35,7 @@ public class StereoSpeakerFragment extends SettingsBasePreferenceFragment implem
     private static final String PREF_STEREO_SPEAKER = "stereo_speaker_pref";
     private static final String PROP_STEREO_SPEAKER = "persist.sys.stereo_speaker";
 
+    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private TwoStatePreference mStereoSpeakerPref;
 
     @Override
@@ -70,7 +74,9 @@ public class StereoSpeakerFragment extends SettingsBasePreferenceFragment implem
     }
 
     private void applyAndPromptRestart(boolean enabled) {
-        SystemProperties.set(PROP_STEREO_SPEAKER, enabled ? "1" : "0");
+        mExecutor.execute(() -> {
+            SystemProperties.set(PROP_STEREO_SPEAKER, enabled ? "1" : "0");
+        });
         mStereoSpeakerPref.setChecked(enabled);
 
         new AlertDialog.Builder(getContext())
@@ -84,5 +90,11 @@ public class StereoSpeakerFragment extends SettingsBasePreferenceFragment implem
                 .setNegativeButton(R.string.stereo_speaker_restart_later, null)
                 .setCancelable(false)
                 .show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mExecutor.shutdown();
     }
 }

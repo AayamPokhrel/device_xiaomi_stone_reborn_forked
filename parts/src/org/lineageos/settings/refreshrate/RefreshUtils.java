@@ -68,6 +68,13 @@ public final class RefreshUtils {
                 UserHandle.CURRENT);
     }
 
+    protected void cleanup() {
+        if (orientationListener != null) {
+            orientationListener.disable();
+            orientationListener = null;
+        }
+    }
+
     private void writeValue(String profiles) {
         mSharedPrefs.edit().putString(REFRESH_CONTROL, profiles).apply();
     }
