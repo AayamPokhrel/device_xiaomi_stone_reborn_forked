@@ -111,8 +111,6 @@ bluetooth.profile.pan.panu.enabled=true
 bluetooth.profile.pbap.server.enabled=true
 bluetooth.profile.sap.server.enabled=false
 bluetooth.profile.vcp.controller.enabled=false
-bluetooth.profile.leaudio.enabled=true
-bluetooth.profile.volume.control.enabled=true
 bluetooth.profile.bass.client.enabled=true
 bluetooth.profile.battery.enabled=true
 

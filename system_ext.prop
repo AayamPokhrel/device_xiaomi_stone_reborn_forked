@@ -1,3 +1,7 @@
+# Bluetooth
+bluetooth.profile.leaudio.enabled=true
+bluetooth.profile.volume.control.enabled=true
+
 # DPM
 persist.vendor.dpm.feature=11
 
