@@ -16,7 +16,7 @@ $(call inherit-product, $(LOCAL_PATH)/device.mk)
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # import private keys
-include vendor/private_keys/keys/keys.mk
+include vendor/private_keys/keys.mk
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2400
