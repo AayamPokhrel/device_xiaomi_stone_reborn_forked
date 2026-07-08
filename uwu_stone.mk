@@ -26,7 +26,7 @@ PRODUCT_BRAND := Redmi
 PRODUCT_DEVICE := stone
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_MODEL := Redmi Note 12 5G
-PRODUCT_NAME := lineage_stone
+PRODUCT_NAME := uwu_stone
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
