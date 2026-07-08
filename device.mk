@@ -19,6 +19,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 # Call the ViperFX Config
 $(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
 
+# GameBar Performance Overlay
+$(call inherit-product, packages/apps/GameBar/gamebar.mk)
+
+# Add Camelot and Recorder from lineage
+PRODUCT_PACKAGES += \
+    Camelot \
+    Recorder
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
