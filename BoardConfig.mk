@@ -124,6 +124,8 @@ BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
 -include vendor/lineage/config/BoardConfigReservedSize.mk
+include vendor/lineage/config/BoardConfigKernel.mk
+include vendor/lineage/config/BoardConfigSoong.mk
 
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 25165824
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 25165824
@@ -150,6 +152,8 @@ BOOT_SECURITY_PATCH := 2026-04-01
 VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 
 # SELinux
+# Include Lineage common sepolicy
+include device/lineage/sepolicy/common/sepolicy.mk
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include device/lineage/sepolicy/libperfmgr/sepolicy.mk
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
