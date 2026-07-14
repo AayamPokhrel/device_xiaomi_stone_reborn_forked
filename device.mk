@@ -461,8 +461,15 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/qcom-caf/common/libqti-perfd-client \
     hardware/xiaomi \
     vendor/qcom/opensource/usb/etc \
-    hardware/qcom-caf/wlan/qcwcn \
-    vendor/qcom/opensource/libvmmem
+    hardware/qcom-caf/wlan/qcwcn
+    #vendor/qcom/opensource/libvmmem
+
+# QCOM Soong Namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/qcom-caf/sm8350/display \
+    vendor/qcom/opensource/commonsys-intf/display \
+    vendor/qcom/opensource/commonsys/display
+    
 # Telephony
 PRODUCT_PACKAGES += \
     extphonelib \
