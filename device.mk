@@ -26,6 +26,8 @@ $(call inherit-product, packages/apps/GameBar/gamebar.mk)
 PRODUCT_PACKAGES += \
     Camelot \
     Recorder
+# Dolby
+$(call inherit-product, hardware/dolby/dolby.mk)
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
