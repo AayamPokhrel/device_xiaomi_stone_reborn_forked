@@ -21,9 +21,8 @@ $(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
 
 # Add jamesdspmanager
 $(call inherit-product, packages/apps/JamesDSPManager/config.mk)
-
-# dolby
-$(call inherit-product, hardware/dolby/dolby.mk)
+# GameBar Performance Overlay
+$(call inherit-product, packages/apps/GameBar/gamebar.mk)
 
 # Add Camelot and Recorder from lineage
 PRODUCT_PACKAGES += \
