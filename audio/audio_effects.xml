@@ -43,6 +43,9 @@
         <library name="shoebox" path="libshoebox.so"/>
         <library name="v4a_re" path="libv4a_re.so"/>
         <library name="misoundfx" path="libmisoundfx.so"/>
+        <!-- JSDP BIN-->
+        <library name="jdsp" path="libjamesdsp.so"/>
+        <!-- JDSP BIN END-->
                 <!--DOLBY DAP-->
         <library name="dap" path="libswdap.so"/>
         <library name="dvl" path="libdlbvol.so"/>
@@ -118,6 +121,9 @@
         <!--DOLBY VQE-->
         <effect name="vqe" library="vqe" uuid="64a0f614-7fa4-48b8-b081-d59dc954616f"/>
         <!--DOLBY END-->
+        <!-- JDSP EFFECTS-->
+        <effect name="jamesdsp" library="jdsp" uuid="f27317f4-c984-4de6-9a90-545759495bf2"/>
+        <!-- JDSP EFFECTS END-->
     </effects>
     <postprocess>
         <stream type="voice_call">

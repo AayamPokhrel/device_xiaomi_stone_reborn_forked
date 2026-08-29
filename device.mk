@@ -19,6 +19,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 # Call the ViperFX Config
 $(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
 
+# Add jamesdspmanager
+$(call inherit-product, packages/apps/JamesDSPManager/config.mk)
+
 # dolby
 $(call inherit-product, hardware/dolby/dolby.mk)
 
