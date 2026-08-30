@@ -5,3 +5,7 @@ set_prop(hal_audio_default, vendor_audio_prop)
 
 allow hal_audio_default audio_socket:sock_file rw_file_perms;
 allow hal_audio_default sound_device:chr_file rw_file_perms;
+
+# Allow audio HAL to write dumpsys results back through pipes owned by priv_app and platform_app
+allow hal_audio_default priv_app:fifo_file { write };
+allow hal_audio_default platform_app:fifo_file { write };
