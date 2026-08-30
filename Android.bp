@@ -11,7 +11,6 @@ soong_namespace {
         "hardware/lineage/interfaces/power-libperfmgr",
         "hardware/qcom-caf/common/libqti-perfd-client",
         "hardware/xiaomi",
-        "hardware/dolby",
     ],
 }
 
