@@ -17,7 +17,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 
 # Call the ViperFX Config
-$(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
+#$(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
 
 # Add jamesdspmanager
 $(call inherit-product, packages/apps/JamesDSPManager/config.mk)
