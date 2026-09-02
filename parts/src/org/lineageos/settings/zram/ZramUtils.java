@@ -98,11 +98,11 @@ public class ZramUtils {
     }
     
     public String getCurrentCompression() {
-        String propValue = SystemProperties.get(ZRAM_COMP_PROP, "zstd");
+        String propValue = SystemProperties.get(ZRAM_COMP_PROP, "lz4");
         if (!propValue.isEmpty()) {
             return propValue;
         }
-        return mSharedPrefs.getString(PREF_ZRAM_COMP, "zstd");
+        return mSharedPrefs.getString(PREF_ZRAM_COMP, "lz4");
     }
 
     public int getCurrentSwappiness() {
