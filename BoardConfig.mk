@@ -124,9 +124,10 @@ BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
--include vendor/lineage/config/BoardConfigReservedSize.mk
-include vendor/lineage/config/BoardConfigKernel.mk
-include vendor/lineage/config/BoardConfigSoong.mk
+-include vendor/uwu/config/BoardConfigReservedSize.mk
+include vendor/uwu/config/BoardConfigKernel.mk
+include vendor/uwu/config/BoardConfigSoong.mk
+include vendor/uwu/config/BoardConfigUWU.mk
 
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 25165824
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 25165824
