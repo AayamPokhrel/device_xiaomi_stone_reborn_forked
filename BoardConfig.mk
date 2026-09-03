@@ -127,7 +127,7 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 -include vendor/uwu/config/BoardConfigReservedSize.mk
 include vendor/uwu/config/BoardConfigKernel.mk
 include vendor/uwu/config/BoardConfigSoong.mk
-include vendor/uwu/config/BoardConfigUWU.mk
+include vendor/uwu/config/BoardConfigUwU.mk
 
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 25165824
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 25165824
