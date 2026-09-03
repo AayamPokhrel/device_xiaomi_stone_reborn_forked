@@ -13,7 +13,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 
 # Inherit some common custom stuff from vendor uwu.
-$(call inherit-product, vendor/custom/config/common_full_phone.mk)
+$(call inherit-product, vendor/uwu/config/common.mk)
 
 # import private keys
 include vendor/lineage-priv/keys/keys.mk
@@ -22,14 +22,16 @@ include vendor/lineage-priv/keys/keys.mk
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
 
+# include uwu device properties ( DOCS PLS )
+UWU_DEVICE_TYPE := phone
+UWU_SUPPORTS_TELEPHONY := true
+
+# device properties
 PRODUCT_BRAND := Redmi
 PRODUCT_DEVICE := stone
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_MODEL := Redmi Note 12 5G
 PRODUCT_NAME := uwu_stone
-# include custom device name ( I wish uwu had documented somethings :())
-CUSTOM_BUILD := stone
-CUSTOM_DEVICE := stone
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
