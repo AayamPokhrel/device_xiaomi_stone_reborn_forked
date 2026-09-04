@@ -22,10 +22,17 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 # Add jamesdspmanager
 $(call inherit-product, packages/apps/JamesDSPManager/config.mk)
 
+# Disable VINTF kernel compatibility checks for 5.4 kernel
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+
 # Add Camelot and Recorder from lineage
 PRODUCT_PACKAGES += \
     Camelot \
     Recorder
+
+# Include Soong kernel build target
+PRODUCT_PACKAGES += \
+    stone_kernel
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal

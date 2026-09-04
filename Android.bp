@@ -14,6 +14,26 @@ soong_namespace {
         "hardware/xiaomi",
     ],
 }
+uwu_kernel {
+    name: "stone_kernel",
+    kernel_dir: "kernel/xiaomi/stone",
+    kernel_arch: "arm64",
+    image_name: "Image",
+    clang_version: "clang-r596125",
+
+    config: {
+        defconfig: "stone_defconfig",
+    },
+
+    dtb: {
+        enabled: true,
+        qcom_merge: true,
+    },
+
+    dtbo: {
+        enabled: true,
+    },
+}
 
 install_symlink {
     name: "firmware_wlan_mac.bin_symlink",
@@ -28,3 +48,4 @@ install_symlink {
     installed_location: "firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini",
     symlink_target: "/vendor/etc/wifi/WCNSS_qcom_cfg.ini",
 }
+

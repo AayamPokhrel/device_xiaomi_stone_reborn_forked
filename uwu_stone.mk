@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# ART Userfaultfd Garbage Collection
+PRODUCT_ENABLE_UFFD_GC := true
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 TARGET_SUPPORTS_OMX_SERVICE := false
@@ -22,7 +25,7 @@ include vendor/lineage-priv/keys/keys.mk
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
 
-# include uwu device properties ( DOCS PLS )
+# include uwu device properties
 UWU_DEVICE_TYPE := phone
 UWU_SUPPORTS_TELEPHONY := true
 
