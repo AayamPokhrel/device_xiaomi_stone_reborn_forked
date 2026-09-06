@@ -160,6 +160,9 @@ public class AutoHBMService extends Service {
         if (mExecutorService != null) {
             mExecutorService.shutdownNow();
         }
+        if (mExecutorService != null) {
+            mExecutorService.shutdownNow();
+        }
     }
 
     @Override
