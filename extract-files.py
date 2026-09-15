@@ -20,13 +20,7 @@ from extract_utils.main import (
 
 namespace_imports = [
     'device/xiaomi/stone',
-    'hardware/qcom-caf/sm8350',
-    'hardware/qcom-caf/wlan',
     'hardware/xiaomi',
-    'vendor/qcom/opensource/commonsys-intf/display',
-    'vendor/qcom/opensource/commonsys/display',
-    'vendor/qcom/opensource/dataservices',
-    'vendor/qcom/opensource/display',
 ]
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
@@ -37,7 +31,6 @@ lib_fixups: lib_fixups_user_type = {
     (
         'com.qualcomm.qti.dpm.api@1.0',
         'vendor.qti.diaghal@1.0',
-        'vendor.qti.hardware.fm@1.0',
         'vendor.qti.ims.callcapability@1.0',
         'vendor.qti.imsrtpservice@3.0',
     ): lib_fixup_vendor_suffix,

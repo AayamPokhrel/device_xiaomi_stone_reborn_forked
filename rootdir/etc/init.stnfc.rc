@@ -11,3 +11,10 @@ service stflashtool /vendor/bin/STFlashTool
        group nfc
        user nfc
        oneshot
+
+service nfc_hal_service /vendor/bin/hw/android.hardware.nfc-service.st
+       override
+       class hal
+       user nfc
+       group nfc
+       interface aidl android.hardware.nfc.INfc/default

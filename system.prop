@@ -8,9 +8,12 @@ ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 
 # Set network mode to (NR_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA) for DSDS
-ro.telephony.default_network=33,33
+ro.telephony.default_network=26,26
 telephony.lteOnCdmaDevice=1
 persist.vendor.radio.atfwd.start=true
+
+# BPF
+ro.bpf.kver_override=5.10.239
 
 # Dalvik / ART
 dalvik.vm.dex2oat64.enabled=true
@@ -43,7 +46,7 @@ persist.data.df.dev_name=rmnet_usb0
 
 # Graphics
 ro.opengles.version=196610
-debug.sf.enable_hwc_vds=1
+debug.sf.enable_hwc_vds=0
 
 # Bluetooth
 ro.bluetooth.emb_wp_mode=false

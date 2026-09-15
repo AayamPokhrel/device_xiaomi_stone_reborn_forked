@@ -52,8 +52,50 @@ TARGET_PROVIDES_AUDIO_EXTNS := true
 TARGET_BOOTLOADER_BOARD_NAME := holi
 TARGET_NO_BOOTLOADER := true
 
+# Platform
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_BOARD_PLATFORM := holi
+QCOM_BOARD_PLATFORMS += holi
+include vendor/qcom/opensource/core-utils/build/utils.mk
+
+# Power
+TARGET_USES_NON_LEGACY_POWERHAL := true
+
+# Build
+BUILD_BROKEN_MISSING_REQUIRED_MODULES := true
+TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
+
 # Display
 TARGET_SCREEN_DENSITY := 440
+include hardware/qcom/display/config/display-board.mk
+
+# QTI Display
+SOONG_CONFIG_NAMESPACES += qtidisplay
+SOONG_CONFIG_qtidisplay += \
+    default \
+    drmpp \
+    gralloc4 \
+    gralloc_handle_has_no_reserved_size \
+    headless \
+    llvmsa \
+    udfps
+
+SOONG_CONFIG_qtidisplay_default := true
+SOONG_CONFIG_qtidisplay_drmpp := true
+SOONG_CONFIG_qtidisplay_gralloc4 := true
+SOONG_CONFIG_qtidisplay_gralloc_handle_has_no_reserved_size := false
+SOONG_CONFIG_qtidisplay_headless := false
+SOONG_CONFIG_qtidisplay_llvmsa := false
+SOONG_CONFIG_qtidisplay_udfps := false
+
+# QTI Display CommonSys
+SOONG_CONFIG_NAMESPACES += qtidisplaycommonsys
+SOONG_CONFIG_qtidisplaycommonsys += \
+    gralloc_handle_has_no_custom_content_md_reserved_size \
+    gralloc_handle_has_no_ubwcp
+
+SOONG_CONFIG_qtidisplaycommonsys_gralloc_handle_has_no_custom_content_md_reserved_size := true
+SOONG_CONFIG_qtidisplaycommonsys_gralloc_handle_has_no_ubwcp := true
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
@@ -63,15 +105,16 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
+    vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml \
     hardware/xiaomi/vintf/xiaomi_framework_compatibility_matrix.xml \
+    vendor/aospa/target/config/aospa_vendor_framework_compatibility_matrix.xml \
     $(DEVICE_PATH)/device_framework_matrix.xml
 
 DEVICE_MANIFEST_FILE := \
     $(DEVICE_PATH)/manifest.xml
 
 DEVICE_MATRIX_FILE := \
-    hardware/qcom-caf/common/compatibility_matrix.xml
+    device/qcom/vendor-common/compatibility_matrix.xml
 
 # Kernel
 BOARD_KERNEL_BASE := 0x00000000
@@ -95,7 +138,10 @@ BOARD_KERNEL_CMDLINE := \
     loop.max_part=7 \
     iptable_raw.raw_before_defrag=1 \
     ip6table_raw.raw_before_defrag=1 \
-    firmware_class.path=/vendor/firmware
+    firmware_class.path=/vendor/firmware \
+    androidboot.fstab_suffix=default \
+    androidboot.init_fatal_reboot_target=recovery
+
 
 TARGET_KERNEL_CLANG_VERSION := r614150
 TARGET_KERNEL_CONFIG := stone_defconfig
@@ -124,24 +170,38 @@ BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
--include vendor/lineage/config/BoardConfigReservedSize.mk
+-include vendor/aospa/target/board/BoardConfigReservedSize.mk
+include vendor/aospa/target/board/BoardConfigAOSPA.mk
 
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 25165824
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 25165824
+BOARD_VENDORIMAGE_EXTFS_INODE_COUNT := 8192
 
 TARGET_COPY_OUT_ODM := odm
 TARGET_COPY_OUT_PRODUCT := product
 TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 TARGET_COPY_OUT_VENDOR := vendor
 
-# Platform
-BOARD_USES_QCOM_HARDWARE := true
-TARGET_BOARD_PLATFORM := holi
-
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.default
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_F2FS := true
+
+# UFS BSG Framework
+SOONG_CONFIG_NAMESPACES += ufsbsg
+SOONG_CONFIG_ufsbsg += ufsframework
+SOONG_CONFIG_ufsbsg_ufsframework := bsg
+
+# RMNETCTL
+SOONG_CONFIG_NAMESPACES += rmnetctl
+SOONG_CONFIG_rmnetctl += old_rmnet_data
+SOONG_CONFIG_rmnetctl_old_rmnet_data := true
+
+# Tinycompress
+SOONG_CONFIG_NAMESPACES += tinycompress
+SOONG_CONFIG_tinycompress += enable_extended_compress_format loop_compress_read
+SOONG_CONFIG_tinycompress_enable_extended_compress_format := true
+SOONG_CONFIG_tinycompress_loop_compress_read := true
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
@@ -152,16 +212,21 @@ VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 
 # SELinux
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-include device/lineage/sepolicy/libperfmgr/sepolicy.mk
-include device/lineage/sepolicy/libion/sepolicy.mk
+include device/qcom/common/sepolicy/SEPolicy.mk
+include vendor/aospa/sepolicy/sepolicy.mk
+include vendor/aospa/sepolicy/libion/sepolicy.mk
+
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/public
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 SELINUX_IGNORE_NEVERALLOWS := true
 
+
+
 # Verified Boot
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_AVB_MAKE_VBMETA_SYSTEM_IMAGE_ARGS += --flags 3
 BOARD_AVB_VBMETA_SYSTEM := product system system_ext
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -171,9 +236,9 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
 BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB := //hardware/qcom/wlan/qcwcn/wpa_supplicant_8_lib:lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := //hardware/qcom/wlan/qcwcn/wpa_supplicant_8_lib:lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB_EVENT := "ON"
 QC_WIFI_HIDL_FEATURE_DUAL_AP := true
 WIFI_DRIVER_DEFAULT := qca_cld3
