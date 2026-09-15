@@ -23,8 +23,11 @@ TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
 # Inherit common AOSPA configuration.
 $(call inherit-product, vendor/aospa/target/product/aospa-target.mk)
 
-# Disable Face Unlock (filter out tp avoid spam logs )
+# Disable Face Unlock (filter out to avoid spam logs and missing app)
 PRODUCT_COPY_FILES := $(filter-out frameworks/native/data/etc/android.hardware.biometrics.face.xml:%,$(PRODUCT_COPY_FILES))
+PRODUCT_PACKAGES := $(filter-out ParanoidSense,$(PRODUCT_PACKAGES))
+PRODUCT_SYSTEM_EXT_PROPERTIES := $(filter-out ro.face.sense_service=%,$(PRODUCT_SYSTEM_EXT_PROPERTIES))
+PRODUCT_SYSTEM_EXT_PROPERTIES += ro.face.sense_service=false
 
 # Exclude framework manifest intended for full value-adds (prevents qccsyshal/atcmdfwd/systemhelper missing service spam)
 DEVICE_FRAMEWORK_MANIFEST_FILE := $(filter-out device/qcom/qssi_64/framework_manifest.xml,$(DEVICE_FRAMEWORK_MANIFEST_FILE))
