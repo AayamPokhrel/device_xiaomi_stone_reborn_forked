@@ -33,6 +33,13 @@ PRODUCT_PACKAGES += \
     Camelot \
     Recorder
 
+# GrapheneOS Camera
+PRODUCT_PACKAGES += \
+    Camera
+
+PRODUCT_PACKAGES_REMOVE += \
+    Aperture
+
 # JamesDSP
 $(call inherit-product-if-exists, packages/apps/JamesDSPManager/config.mk)
 
