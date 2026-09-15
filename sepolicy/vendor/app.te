@@ -1,2 +1,4 @@
 get_prop({ appdomain -isolated_app_all }, vendor_fp_prop)
 get_prop({ appdomain -isolated_app_all }, vendor_mlipay_prop)
+
+dontaudit { appdomain -isolated_app_all } ion_device:chr_file rw_file_perms;

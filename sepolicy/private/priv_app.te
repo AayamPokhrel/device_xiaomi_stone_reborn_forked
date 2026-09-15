@@ -1,0 +1,5 @@
+dontaudit { priv_app priv_app_36 } device:dir open;
+dontaudit { priv_app priv_app_36 gmscore_app } vendor_default_prop:file r_file_perms;
+
+allow { priv_app priv_app_36 } vendor_dpmtcm_socket:sock_file write;
+allow { priv_app priv_app_36 } vendor_dpmd:unix_stream_socket connectto;

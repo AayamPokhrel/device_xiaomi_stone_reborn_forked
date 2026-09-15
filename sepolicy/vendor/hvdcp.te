@@ -1,0 +1,2 @@
+# Allow hvdcp to stop itself
+set_prop(vendor_hvdcp, ctl_stop_prop)

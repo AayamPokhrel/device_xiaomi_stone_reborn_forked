@@ -4,3 +4,5 @@ set_prop(vendor_init, vendor_zram_prop);
 
 # Stereospeaker mod
 allow init vendor_configs_file:file mounton;
+
+allow vendor_init proc_sched:file w_file_perms;
