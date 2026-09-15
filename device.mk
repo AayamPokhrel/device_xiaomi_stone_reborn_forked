@@ -221,7 +221,7 @@ $(call soong_config_set_bool,libion,legacy_impl,true)
 
 # IR
 PRODUCT_PACKAGES += \
-    android.hardware.ir-service.lineage
+    android.hardware.ir-service.xiaomi
 
 # Kernel
 PRODUCT_ENABLE_UFFD_GC := true
