@@ -67,3 +67,6 @@
 
 # ZRAM
 /sys/block/zram0/comp_algorithm 					       u:object_r:sysfs_zram:s0
+
+# Power
+/data/vendor/powerhal(/.*)?                                                        u:object_r:powerhal_vendor_data_file:s0
