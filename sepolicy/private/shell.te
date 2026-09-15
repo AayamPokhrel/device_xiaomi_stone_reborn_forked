@@ -1,0 +1,4 @@
+userdebug_or_eng(`
+  allow shell idmap_exec:file rx_file_perms;
+')
+dontaudit shell qemu_sf_lcd_density_prop:file read;
