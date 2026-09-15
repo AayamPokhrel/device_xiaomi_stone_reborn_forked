@@ -2,7 +2,7 @@
      Copyright (C) 2019-2020 The Linux Foundation
      SPDX-License-Identifier: BSD-3-Clause
 -->
-<manifest version="2.0" type="device" target-level="5">
+<manifest version="2.0" type="device" target-level="6">
     <hal format="hidl">
         <name>android.hardware.audio</name>
         <transport>hwbinder</transport>
@@ -50,16 +50,6 @@
         <name>android.hardware.soundtrigger</name>
         <transport>hwbinder</transport>
         <fqname>@2.3::ISoundTriggerHw/default</fqname>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.tetheroffload.config</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.0::IOffloadConfig/default</fqname>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.tetheroffload.control</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.1::IOffloadControl/default</fqname>
     </hal>
     <hal format="hidl">
         <name>com.fingerprints.extension</name>

@@ -23,6 +23,8 @@ TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
 # Inherit common AOSPA configuration.
 $(call inherit-product, vendor/aospa/target/product/aospa-target.mk)
 
+# Disable Face Unlock (filter out tp avoid spam logs )
+PRODUCT_COPY_FILES := $(filter-out frameworks/native/data/etc/android.hardware.biometrics.face.xml:%,$(PRODUCT_COPY_FILES))
 
 # Exclude framework manifest intended for full value-adds (prevents qccsyshal/atcmdfwd/systemhelper missing service spam)
 DEVICE_FRAMEWORK_MANIFEST_FILE := $(filter-out device/qcom/qssi_64/framework_manifest.xml,$(DEVICE_FRAMEWORK_MANIFEST_FILE))
