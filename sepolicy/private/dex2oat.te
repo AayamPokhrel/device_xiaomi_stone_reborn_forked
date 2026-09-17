@@ -1,0 +1,2 @@
+# Allow dex2oat to search privileged app data directories
+allow dex2oat privapp_data_file:dir search;
