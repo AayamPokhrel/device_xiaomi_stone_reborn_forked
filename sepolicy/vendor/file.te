@@ -4,3 +4,6 @@ type vendor_sysfs_corecontrol, fs_type, sysfs_type;
 # Power HAL
 type powerhal_vendor_data_file, file_type, data_file_type;
 
+# Swappiness
+type vendor_proc_swappiness, proc_type, fs_type;
+

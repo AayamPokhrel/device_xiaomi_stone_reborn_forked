@@ -1,1 +1,1 @@
-allow hal_drm_widevine ion_device:chr_file rw_file_perms;
+allow vendor_hal_drm_widevine ion_device:chr_file rw_file_perms;
