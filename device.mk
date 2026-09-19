@@ -6,6 +6,9 @@
 
 # Platform
 TARGET_BOARD_PLATFORM := holi
+TARGET_KERNEL_VERSION := 5.4
+TARGET_USES_NQ_NFC := false
+TARGET_USES_ST_NFC := true
 TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
 include vendor/qcom/opensource/core-utils/build/utils.mk
 $(call inherit-product, device/qcom/common/common.mk)
@@ -15,6 +18,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
+
+PRODUCT_SOURCE_ROOT_DIRS += -hardware/xiaomi/dolby
+
 
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
@@ -432,7 +438,8 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/interfaces \
     hardware/qcom/display \
     hardware/qcom/wlan/qcwcn \
-    hardware/xiaomi
+    hardware/xiaomi \
+    vendor/qcom/opensource/data-ipa-cfg-mgr-legacy
 
 # Telephony
 PRODUCT_PACKAGES += \

@@ -47,6 +47,8 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <!--  we'll see about hal later, first we strip everything that is not present
+    
     <hal format="aidl" optional="true">
         <name>vendor.aospa.power</name>
         <version>1</version>
@@ -54,7 +56,9 @@
             <name>IPowerFeature</name>
             <instance>default</instance>
         </interface>
-    </hal>
+    </hal>  
+    
+     -->
     <hal format="hidl" optional="true">
         <name>vendor.qti.gnss</name>
         <version>1.2</version>

@@ -20,8 +20,8 @@ $(call inherit-product, $(LOCAL_PATH)/device.mk)
 # Disable full value-adds framework manifest before inheriting common AOSPA
 TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
 
-# Inherit common AOSPA configuration.
-$(call inherit-product, vendor/aospa/target/product/aospa-target.mk)
+# Inherit common Neoteric configuration.
+$(call inherit-product, vendor/neoteric/target/product/neoteric-target.mk)
 
 # Face Biometrics (AIDL Virtual HAL)
 PRODUCT_PACKAGES += \
@@ -44,7 +44,7 @@ PRODUCT_PACKAGES_REMOVE += \
 $(call inherit-product-if-exists, packages/apps/JamesDSPManager/config.mk)
 
 # Exclude framework manifest intended for full value-adds (prevents qccsyshal/atcmdfwd/systemhelper missing service spam)
-DEVICE_FRAMEWORK_MANIFEST_FILE := $(filter-out device/qcom/qssi_64/framework_manifest.xml,$(DEVICE_FRAMEWORK_MANIFEST_FILE))
+#DEVICE_FRAMEWORK_MANIFEST_FILE := $(filter-out device/qcom/qssi_64/framework_manifest.xml,$(DEVICE_FRAMEWORK_MANIFEST_FILE))
 
 # Boot animation
 TARGET_BOOT_ANIMATION_RES := 1080

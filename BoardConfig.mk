@@ -107,7 +107,7 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml \
     hardware/xiaomi/vintf/xiaomi_framework_compatibility_matrix.xml \
-    vendor/aospa/target/config/aospa_vendor_framework_compatibility_matrix.xml \
+    vendor/neoteric/target/config/neoteric_vendor_framework_compatibility_matrix.xml \
     $(DEVICE_PATH)/device_framework_matrix.xml
 
 DEVICE_MANIFEST_FILE := \
@@ -127,6 +127,7 @@ BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 
+BOARD_BOOTCONFIG := androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE := \
     androidboot.hardware=qcom \
     androidboot.memcg=1 \
@@ -143,7 +144,7 @@ BOARD_KERNEL_CMDLINE := \
     androidboot.init_fatal_reboot_target=recovery
 
 
-TARGET_KERNEL_CLANG_VERSION := r614150
+TARGET_KERNEL_CLANG_VERSION := r584948b
 TARGET_KERNEL_CONFIG := stone_defconfig
 TARGET_KERNEL_SOURCE := kernel/xiaomi/stone
 TARGET_KERNEL_NO_GCC := true
@@ -170,8 +171,8 @@ BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
--include vendor/aospa/target/board/BoardConfigReservedSize.mk
-include vendor/aospa/target/board/BoardConfigAOSPA.mk
+
+include vendor/neoteric/target/board/BoardConfigNeoteric.mk
 
 BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 25165824
 BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 25165824
@@ -213,8 +214,8 @@ VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 # SELinux
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include device/qcom/common/sepolicy/SEPolicy.mk
-include vendor/aospa/sepolicy/sepolicy.mk
-include vendor/aospa/sepolicy/libion/sepolicy.mk
+include device/neoteric/sepolicy/sepolicy.mk
+include device/neoteric/sepolicy/qcom/sepolicy.mk
 
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/public
