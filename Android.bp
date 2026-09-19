@@ -32,3 +32,13 @@ install_symlink {
     symlink_target: "/data/vendor/firmware/wlanmdsp.mbn",
 }
 
+cc_library_headers {
+    name: "peripheralstate_headers",
+    vendor_available: true,
+}
+
+cc_library_headers {
+    name: "mink_headers",
+    vendor_available: true,
+}
+
