@@ -127,7 +127,6 @@ BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 
-BOARD_BOOTCONFIG := androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE := \
     androidboot.hardware=qcom \
     androidboot.memcg=1 \
