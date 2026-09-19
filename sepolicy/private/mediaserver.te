@@ -1,0 +1,2 @@
+# Allow mediaserver to access /dev/ion for legacy decoders (NPDecoder-CL)
+allow mediaserver ion_device:chr_file rw_file_perms;

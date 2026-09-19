@@ -1,0 +1,2 @@
+# Ensure com.android.bluetooth transitions to bluetooth domain even if signed with platform/test keys
+user=bluetooth domain=bluetooth type=bluetooth_data_file
