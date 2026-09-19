@@ -24,6 +24,7 @@ PRODUCT_SOURCE_ROOT_DIRS += -hardware/xiaomi/dolby
 
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
