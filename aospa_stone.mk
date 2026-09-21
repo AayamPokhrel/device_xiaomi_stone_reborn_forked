@@ -40,9 +40,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES_REMOVE += \
     Aperture
 
-# JamesDSP
-$(call inherit-product-if-exists, packages/apps/JamesDSPManager/config.mk)
-
 # Exclude framework manifest intended for full value-adds (prevents qccsyshal/atcmdfwd/systemhelper missing service spam)
 #DEVICE_FRAMEWORK_MANIFEST_FILE := $(filter-out device/qcom/qssi_64/framework_manifest.xml,$(DEVICE_FRAMEWORK_MANIFEST_FILE))
 
