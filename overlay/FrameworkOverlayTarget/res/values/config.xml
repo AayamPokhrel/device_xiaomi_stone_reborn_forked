@@ -456,6 +456,32 @@
          available on some devices. -->
     <bool name="config_enableHapticTextHandle">true</bool>
 
+    <!-- Vibrator pattern for feedback about touching a virtual key -->
+    <integer-array name="config_virtualKeyVibePattern">
+        <item>0</item>
+        <item>40</item>
+    </integer-array>
+
+    <!-- Vibrator pattern for feedback about a long screen/key press -->
+    <integer-array name="config_longPressVibePattern">
+        <item>0</item>
+        <item>60</item>
+    </integer-array>
+
+    <!-- Vibrator pattern for feedback that simulates a double click effect -->
+    <integer-array name="config_doubleClickVibePattern">
+        <item>0</item>
+        <item>35</item>
+        <item>100</item>
+        <item>35</item>
+    </integer-array>
+
+    <!-- Vibrator pattern for feedback when selecting an hour/minute tick of a Clock and gesture navigation -->
+    <integer-array name="config_clockTickVibePattern">
+        <item>0</item>
+        <item>35</item>
+    </integer-array>
+
     <!-- Whether or not wcg (wide color gamut) should be enabled on this device,
          we only enabled it while the device has ability of mixed color spaces composition -->
     <bool name="config_enableWcgMode">true</bool>
@@ -567,10 +593,6 @@
 
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
-    
-    <!-- The duration (in milliseconds) that should be applied to waveform vibrations that ends in
-         non-zero amplitudes, to bring the vibrator amplitude down to zero using this timing. -->
-    <integer name="config_vibrationWaveformRampDownDuration">25</integer>
 
     <!-- Config determines whether to update phone object when voice registration
          state changes. Voice radio tech change will always trigger an update of
