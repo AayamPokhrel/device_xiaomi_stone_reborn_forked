@@ -1,0 +1,2 @@
+# Allow init to mount tracefs on /sys/kernel/tracing
+allow init debugfs_tracing_debug:dir mounton;

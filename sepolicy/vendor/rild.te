@@ -1,4 +1,4 @@
 # IMEI
 set_prop(rild, vendor_deviceid_prop)
 
-dontaudit rild default_prop:file read;
+dontaudit rild default_prop:file r_file_perms;

@@ -1,0 +1,2 @@
+# Bluetooth
+bluetooth.profile.battery.enabled    u:object_r:exported_bluetooth_prop:s0 exact bool

@@ -60,6 +60,7 @@
 /(vendor|system/vendor)/bin/mlipayd@1.1                                        u:object_r:hal_mlipay_default_exec:s0
 
 # NFC
+/vendor/bin/STFlashTool                                                            u:object_r:vendor_stflashtool_exec:s0
 /vendor/bin/hw/android\.hardware\.nfc-service\.st                                  u:object_r:hal_nfc_default_exec:s0
 
 # Power
@@ -80,3 +81,6 @@
 
 # ZRAM
 /sys/block/zram0/comp_algorithm 					       u:object_r:sysfs_zram:s0
+
+# Post Processing Daemon (SVI)
+/vendor/bin/ppd                                                                    u:object_r:vendor_ppd_exec:s0

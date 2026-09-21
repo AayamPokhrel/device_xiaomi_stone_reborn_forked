@@ -1,0 +1,2 @@
+# Allow kcmdlinectrl to read device-tree compatible node for fstab lookup
+r_dir_file(kcmdlinectrl, sysfs_dt_firmware_android)

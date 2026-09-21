@@ -1,0 +1,1 @@
+allow vendor_hal_keymaster_qti ion_device:chr_file rw_file_perms;

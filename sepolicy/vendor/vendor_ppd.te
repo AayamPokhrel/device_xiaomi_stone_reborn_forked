@@ -1,0 +1,9 @@
+# Post Processing Daemon (SVI)
+type vendor_ppd, domain;
+type vendor_ppd_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(vendor_ppd)
+
+# Allow vendor_ppd to communicate with hal_graphics_composer via socket /dev/socket/pps
+allow vendor_ppd vendor_pps_socket:sock_file write;
+allow vendor_ppd hal_graphics_composer_default:unix_stream_socket connectto;

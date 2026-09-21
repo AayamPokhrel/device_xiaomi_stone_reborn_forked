@@ -1,0 +1,2 @@
+# Allow linkerconfig to send kill signal when managing child processes
+allow linkerconfig self:capability kill;

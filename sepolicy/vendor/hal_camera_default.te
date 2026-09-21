@@ -6,3 +6,11 @@ r_dir_file(hal_camera_default, camera_persist_file)
 allow hal_camera_default mnt_vendor_file:dir search;
 
 binder_call(hal_camera_default, system_server)
+allow hal_camera_default ion_device:chr_file rw_file_perms;
+get_prop(hal_camera_default, aac_drc_prop)
+dontaudit hal_camera_default {
+  ab_update_gki_prop
+  adaptive_haptics_prop
+  adbd_config_prop
+}:file r_file_perms;
+dontaudit hal_camera_default system_internal_property_type:file r_file_perms;

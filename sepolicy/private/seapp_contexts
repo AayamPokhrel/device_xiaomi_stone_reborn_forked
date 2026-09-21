@@ -1,2 +1,5 @@
 # Ensure com.android.bluetooth transitions to bluetooth domain even if signed with platform/test keys
 user=bluetooth domain=bluetooth type=bluetooth_data_file
+
+# Ensure com.android.se data directory is created with app_data_file type
+user=secure_element domain=secure_element type=app_data_file levelFrom=all

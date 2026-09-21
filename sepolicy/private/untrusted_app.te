@@ -1,1 +1,2 @@
 dontaudit untrusted_app_all shell_test_data_file:dir search;
+dontaudit untrusted_app_all vendor_default_prop:file r_file_perms;

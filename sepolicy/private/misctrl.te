@@ -1,0 +1,2 @@
+# Allow misctrl to read device-tree compatible node for fstab lookup
+r_dir_file(misctrl, sysfs_dt_firmware_android)
