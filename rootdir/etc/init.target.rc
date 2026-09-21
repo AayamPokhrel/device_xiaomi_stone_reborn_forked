@@ -34,7 +34,6 @@ on early-init
     wait /sys/devices/soc0/soc_id
     exec u:r:vendor_qti_init_shell:s0 -- /vendor/bin/init.qti.early_init.sh
     setprop ro.soc.model ${ro.vendor.qti.soc_model}
-    setprop ro.bpf.kver_override 5.10.239
 
 
 on init
