@@ -1,0 +1,1 @@
+dontaudit crash_dump { vendor_overlay_file resourcecache_data_file }:file r_file_perms;

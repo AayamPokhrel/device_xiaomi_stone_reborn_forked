@@ -1,4 +1,6 @@
 get_prop({ appdomain -isolated_app_all }, vendor_fp_prop)
 get_prop({ appdomain -isolated_app_all }, vendor_mlipay_prop)
 
-dontaudit { appdomain -isolated_app_all } ion_device:chr_file rw_file_perms;
+# Allow apps (launcher, systemui, etc.) to open /dev/ion for GPU buffer allocation
+# The Adreno EGL driver calls open(/dev/ion) during eglInitialize()
+allow { appdomain -isolated_app_all } ion_device:chr_file { open read write ioctl getattr map lock };
