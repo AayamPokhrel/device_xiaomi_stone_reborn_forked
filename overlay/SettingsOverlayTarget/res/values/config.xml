@@ -42,6 +42,8 @@
     <bool name="config_show_refresh_rate_controls">true</bool>
 
     <!-- Show battery cycle count -->
-        <bool name="config_show_battery_cycle_count" translatable="false">true</bool>
+    <bool name="config_show_battery_cycle_count" translatable="false">true</bool>
 
+    <!-- Whether to show a preference item for regulatory information in About phone -->
+    <bool name="config_show_regulatory_info">true</bool>
 </resources>

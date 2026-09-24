@@ -519,9 +519,7 @@
          @see https://www.w3.org/TR/SVG/paths.html#PathData
          -->
     <string name="config_mainBuiltInDisplayCutout" translatable="false">
-        M -25,52
-        a 25,25 0 1,0 50,0
-        a 25,25 0 1,0 -50,0
+        M 0,0 H -28 V 94 H 28 V 0 H 0 Z
     </string>
 
     <!-- Like config_mainBuiltInDisplayCutout, but this path is used to report the
@@ -531,12 +529,7 @@
          config_mainBuiltInDisplayCutout
          -->
     <string name="config_mainBuiltInDisplayCutoutRectApproximation" translatable="false">
-        M 0,0
-        H -25
-        V 77
-        H 25
-        V 0
-        H 0
+        M 0,0 H -28 V 94 H 28 V 0 H 0 Z
     </string>
 
     <!-- MMS user agent string -->
@@ -658,4 +651,7 @@
     
     <!-- Needed for custom rom CPU temp paths -->
     <string name="config_cpu_temp_path">/sys/class/thermal/thermal_zone28/temp</string>
+
+    <!-- Indicates whether device has a power button fingerprint sensor. -->
+    <bool name="config_is_powerbutton_fps">true</bool>
 </resources>
