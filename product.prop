@@ -16,7 +16,3 @@ av.offload.enable=true
 
 # Cutout
 ro.support_hide_display_cutout=true
-
-# Dolby & Spatializer
-ro.audio.spatializer_enabled=true
-persist.vendor.audio.auto.scenario=true

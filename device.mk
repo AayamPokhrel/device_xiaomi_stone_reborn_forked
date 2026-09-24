@@ -208,22 +208,15 @@ $(call soong_config_set_bool,lineage_health,charging_control_supports_bypass,fal
 
 # Logging
 SPAMMY_LOG_TAGS := \
-    MiStcImpl \
     SDM \
     SDM-histogram \
-    SRE \
     WifiHAL \
     cnss-daemon \
-    libcitsensorservice@2.0-impl \
-    libsensor-displayalgo \
-    libsensor-parseRGB \
-    libsensor-ssccalapi \
     sensors \
     sensors-hal \
     vendor.qti.bluetooth@1.0-ibs_handler \
     vendor.qti.bluetooth@1.0-wake_lock \
-    vendor.qti.hardware.display.composer-service \
-    vendor.xiaomi.sensor.citsensorservice@2.0-service
+    vendor.qti.hardware.display.composer-service
 
 ifneq ($(TARGET_BUILD_VARIANT),eng)
 PRODUCT_VENDOR_PROPERTIES += \
