@@ -13,3 +13,10 @@ audio.sys.noisy.broadcast.delay=500
 audio.sys.offload.pstimeout.secs=3
 audio.sys.routing.latency=0
 av.offload.enable=true
+
+# Cutout
+ro.support_hide_display_cutout=true
+
+# Dolby & Spatializer
+ro.audio.spatializer_enabled=true
+persist.vendor.audio.auto.scenario=true

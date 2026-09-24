@@ -370,7 +370,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 <route type="mix" sink="USB Device Out"
                        sources="primary output,deep_buffer,direct_pcm,compressed_offload,voip_rx,mmap_no_irq_out,hifi_playback"/>
                 <route type="mix" sink="USB Headset Out"
-                       sources="primary output,deep_buffer,direct_pcm,compressed_offload,voip_rx,mmap_no_irq_out,hifi_playback"/>
+                       sources="primary output,deep_buffer,direct_pcm,compressed_offload,voip_rx,mmap_no_irq_out,hifi_playback,spatial output"/>
                 <route type="mix" sink="Telephony Tx"
                        sources="voice_tx,incall_music_uplink"/>
                 <route type="mix" sink="voice_rx"
@@ -412,6 +412,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                        sources="usb_accessory output"/>
             </routes>
         </module>
+
 
         <!-- Bluetooth Audio HAL -->
         <xi:include href="/vendor/etc/audio/sku_holi/bluetooth_audio_policy_configuration_7_0.xml"/>

@@ -1,0 +1,2 @@
+allow cameraserver ion_device:chr_file rw_file_perms;
+get_prop(cameraserver, vendor_display_prop)

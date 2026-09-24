@@ -19,8 +19,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
-PRODUCT_SOURCE_ROOT_DIRS += -hardware/xiaomi/dolby
-
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch.mk)
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
@@ -50,8 +48,8 @@ PRODUCT_PACKAGES += \
     android.hardware.audio@7.0-impl \
     android.hardware.audio.effect@7.0-impl \
     android.hardware.audio.service \
-    android.hardware.bluetooth.audio-impl \
-    android.hardware.soundtrigger@2.3-impl
+    android.hardware.soundtrigger@2.3-impl \
+    libstagefright_foundation-v33
 
 PRODUCT_PACKAGES += \
     audio.bluetooth.default \
@@ -124,6 +122,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.composer-service
 
+# Cutout
+PRODUCT_PACKAGES += \
+    AvoidAppsInCutoutOverlay \
+    NoCutoutOverlay
+
 PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@3.0-impl-qti-display \
     android.hardware.graphics.mapper@4.0-impl-qti-display \
@@ -194,13 +197,35 @@ PRODUCT_PACKAGES += \
 
 # Health
 PRODUCT_PACKAGES += \
-    android.hardware.health-service.qti \
-    android.hardware.health-service.qti_recovery
-
-PRODUCT_PACKAGES += \
+    android.hardware.health-service.xiaomi \
+    android.hardware.health-service.xiaomi_recovery \
     vendor.lineage.health-service.default
 
 $(call soong_config_set_bool,lineage_health,charging_control_supports_bypass,false)
+
+# Logging
+SPAMMY_LOG_TAGS := \
+    MiStcImpl \
+    SDM \
+    SDM-histogram \
+    SRE \
+    WifiHAL \
+    cnss-daemon \
+    libcitsensorservice@2.0-impl \
+    libsensor-displayalgo \
+    libsensor-parseRGB \
+    libsensor-ssccalapi \
+    sensors \
+    sensors-hal \
+    vendor.qti.bluetooth@1.0-ibs_handler \
+    vendor.qti.bluetooth@1.0-wake_lock \
+    vendor.qti.hardware.display.composer-service \
+    vendor.xiaomi.sensor.citsensorservice@2.0-service
+
+ifneq ($(TARGET_BUILD_VARIANT),eng)
+PRODUCT_VENDOR_PROPERTIES += \
+    $(foreach tag,$(SPAMMY_LOG_TAGS),log.tag.$(tag)=E)
+endif
 
 # HIDL
 PRODUCT_PACKAGES += \
