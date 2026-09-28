@@ -22,4 +22,9 @@
     default that should be overridden by device-specific overlays. -->
     <dimen name="physical_power_button_center_screen_location_y">922px</dimen>
 
+    <!-- Status bar icon scaling and sizing -->
+    <item name="status_bar_icon_scale_factor" format="float" type="dimen">0.91</item>
+    <dimen name="status_bar_wifi_signal_height_updated">11sp</dimen>
+    <dimen name="status_bar_mobile_signal_size_updated">11sp</dimen>
+
 </resources>
