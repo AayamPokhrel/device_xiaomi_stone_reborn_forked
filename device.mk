@@ -91,7 +91,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@2.0.vendor \
     vendor.qti.hardware.fm@1.0 \
     vendor.qti.hardware.fm@1.0.vendor
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
@@ -463,7 +462,16 @@ PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/data-ipa-cfg-mgr-legacy
 
 # Telephony
+# extphonelib and qti-telephony-* from vendor/codeaurora/commonsys/telephony.
+# XML permission files are auto-installed by each module; listing them again
+# in PRODUCT_PACKAGES creates duplicate kati install rules.
 PRODUCT_PACKAGES += \
+    extphonelib \
+    extphonelib-product \
+    qti-telephony-hidl-wrapper \
+    qti-telephony-hidl-wrapper-prd \
+    qti-telephony-utils \
+    qti-telephony-utils-prd \
     xiaomi-telephony-stub
 
 PRODUCT_BOOT_JARS += \
