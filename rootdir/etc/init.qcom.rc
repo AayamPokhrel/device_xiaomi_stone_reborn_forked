@@ -110,6 +110,7 @@ on boot
     setprop wifi.interface wlan0
 
     setprop persist.bluetooth.a2dp_offload.disabled true
+    setprop persist.vendor.bt.a2dp.aac_whitelist false
 
     setprop ro.telephony.call_ring.multiple false
 
