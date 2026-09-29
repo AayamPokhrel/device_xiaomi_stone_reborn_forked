@@ -899,16 +899,11 @@ system_ext/etc/sysconfig/qti_telephony_system_packages_config.xml
 # IExtPhone.aidl: has queryNrIconType, NOT queryNrIcon). Must NOT be built from
 # CLO Android 17 source which added queryNrIcon and causes AbstractMethodError
 # when SystemUI dispatches it to QtiTelephonyService blob that doesn't implement it.
-system_ext/etc/permissions/extphonelib.xml
-system_ext/etc/permissions/qti_telephony_hidl_wrapper.xml
-system_ext/etc/permissions/qti_telephony_utils.xml
+# Note: XML permission files are provided by CLO source modules (extphonelib.xml, etc.)
 system_ext/framework/extphonelib.jar
 system_ext/framework/qti-telephony-hidl-wrapper.jar
 system_ext/framework/qti-telephony-utils.jar
 system_ext/framework/qti-telephony-common.jar
-product/etc/permissions/extphonelib_product.xml
-product/etc/permissions/qti_telephony_hidl_wrapper_prd.xml
-product/etc/permissions/qti_telephony_utils_prd.xml
 product/framework/extphonelib-product.jar
 product/framework/qti-telephony-hidl-wrapper-prd.jar
 product/framework/qti-telephony-utils-prd.jar
