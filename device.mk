@@ -527,3 +527,9 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # Inherit from proprietary targets
 $(call inherit-product, vendor/xiaomi/stone/stone-vendor.mk)
+
+# CLO's ExtPhone client includes queryNrIcon(), but the Android 14 QtiTelephony
+# app does not implement it. SystemUI calls it on every ExtTelephony connection,
+# crashing the com.qti.phone process and causing a rapid restart loop. Use the
+# platform telephony path until a matching ExtPhone service is available.
+PRODUCT_PACKAGES -= QtiTelephony
