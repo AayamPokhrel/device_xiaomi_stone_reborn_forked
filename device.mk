@@ -10,7 +10,6 @@ TARGET_KERNEL_VERSION := 5.4
 TARGET_USES_NQ_NFC := false
 TARGET_USES_ST_NFC := true
 TARGET_FWK_SUPPORTS_FULL_VALUEADDS := false
-TARGET_COMMON_QTI_COMPONENTS += telephony
 include vendor/qcom/opensource/core-utils/build/utils.mk
 $(call inherit-product, device/qcom/common/common.mk)
 
@@ -453,9 +452,13 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/interfaces \
     hardware/qcom/display \
     hardware/qcom/wlan/qcwcn \
-    hardware/xiaomi
+    hardware/xiaomi \
+    vendor/qcom/opensource/data-ipa-cfg-mgr-legacy
 
 # Telephony
+# extphonelib and qti-telephony-* from vendor/codeaurora/commonsys/telephony.
+# XML permission files are auto-installed by each module; listing them again
+# in PRODUCT_PACKAGES creates duplicate kati install rules.
 PRODUCT_PACKAGES += \
     extphonelib \
     extphonelib-product \
@@ -519,6 +522,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Inherit from proprietary targets
 $(call inherit-product, vendor/xiaomi/stone/stone-vendor.mk)
 
-PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0.vendor \
-    android.hardware.tetheroffload.control@1.0.vendor
+# CLO's ExtPhone client includes queryNrIcon(), but the Android 14 QtiTelephony
+# app does not implement it. SystemUI calls it on every ExtTelephony connection,
+# crashing the com.qti.phone process and causing a rapid restart loop. Use the
+# platform telephony path until a matching ExtPhone service is available.
+PRODUCT_PACKAGES -= QtiTelephony
