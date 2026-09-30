@@ -224,6 +224,8 @@ ro.lmk.filecache_min_kb=150000
 debug.stagefright.c2inputsurface=-1
 vendor.netflix.bsp_rev=Q4350-32962-1
 ro.surface_flinger.supports_background_blur=1
+ro.sf.blurs_are_expensive=1
+ro.launcher.blur.appLaunch=0
 
 # NFC
 ro.vendor.nfc.repair=1
