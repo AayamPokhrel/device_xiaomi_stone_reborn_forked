@@ -970,6 +970,9 @@ vendor/lib64/libperipheral_client.so
 system_ext/etc/public.libraries-qti.txt
 vendor/etc/public.libraries.txt
 
+# Power-off charging daemon
+system/bin/charger:system/bin/chargeonlymode
+
 # QCV
 vendor/bin/init.qti.qcv.sh
 vendor/etc/init/init.qti.qcv.rc

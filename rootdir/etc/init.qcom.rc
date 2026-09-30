@@ -754,3 +754,11 @@ on property:vendor.post_boot.parsed=1
 # Stereospeaker mod
 on property:persist.sys.stereo_speaker=1
     mount none /vendor/etc/audio/sku_holi/mixer_paths_stereo_qrdsku1.xml /vendor/etc/audio/sku_holi/mixer_paths_qrdsku1.xml bind
+
+# Power-off charging daemon
+service vendor.charger /system/bin/chargeonlymode
+    class charger
+    user system
+    group system graphics input
+    capabilities SYS_BOOT
+    seclabel u:r:charger:s0
