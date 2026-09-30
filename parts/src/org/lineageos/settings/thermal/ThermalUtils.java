@@ -44,6 +44,8 @@ import java.util.Map;
 public final class ThermalUtils {
 
     private static final String THERMAL_CONTROL = "thermal_control_v2";
+    private static final String THERMAL_ENABLED = "thermal_enabled";
+    private static final Object sProfileLock = new Object();
 
     protected static final int STATE_DEFAULT = 0;
     protected static final int STATE_BENCHMARK = 1;
@@ -92,8 +94,34 @@ public final class ThermalUtils {
     }
 
     public static void startService(Context context) {
-        context.startServiceAsUser(new Intent(context, ThermalService.class),
-                UserHandle.CURRENT);
+        if (isServiceEnabled(context) && FileUtils.fileExists(THERMAL_SCONFIG)) {
+            context.startServiceAsUser(new Intent(context, ThermalService.class),
+                    UserHandle.CURRENT);
+        }
+    }
+
+    public static boolean isServiceEnabled(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(THERMAL_ENABLED, true);
+    }
+
+    public static void setServiceEnabled(Context context, boolean enabled) {
+        synchronized (sProfileLock) {
+            PreferenceManager.getDefaultSharedPreferences(context).edit()
+                    .putBoolean(THERMAL_ENABLED, enabled)
+                    .apply();
+            if (!enabled) {
+                ThermalUtils thermalUtils = new ThermalUtils(context);
+                thermalUtils.setDefaultThermalProfile();
+            }
+        }
+
+        Intent serviceIntent = new Intent(context, ThermalService.class);
+        if (enabled) {
+            startService(context);
+        } else {
+            context.stopService(serviceIntent);
+        }
     }
 
     private void writeValue(String profiles) {
@@ -102,6 +130,11 @@ public final class ThermalUtils {
 
     private String getValue() {
         String value = mSharedPrefs.getString(THERMAL_CONTROL, null);
+
+        if (value != null) {
+            String[] modes = value.split(":");
+            if (modes.length != 9) value = null;
+        }
 
         if (value == null || value.isEmpty()) {
             value = THERMAL_BENCHMARK + ":" + THERMAL_BROWSER + ":" + THERMAL_CAMERA + ":" +
@@ -189,8 +222,14 @@ public final class ThermalUtils {
     }
 
     protected void setThermalProfile(String packageName) {
-        final int state = getStateForPackage(packageName);
-        FileUtils.writeLine(THERMAL_SCONFIG, THERMAL_STATE_MAP.get(state));
+        synchronized (sProfileLock) {
+            if (!mSharedPrefs.getBoolean(THERMAL_ENABLED, true)) {
+                setDefaultThermalProfile();
+                return;
+            }
+            final int state = getStateForPackage(packageName);
+            FileUtils.writeLine(THERMAL_SCONFIG, THERMAL_STATE_MAP.get(state));
+        }
     }
 
     private String getDefaultDialerPackage() {

@@ -18,107 +18,128 @@ package org.lineageos.settings.speaker;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.media.AudioManager;
 import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
-import androidx.preference.Preference;
-import com.android.settingslib.widget.SettingsBasePreferenceFragment;
-import androidx.preference.TwoStatePreference;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import org.lineageos.settings.R;
 
 import java.io.IOException;
 
-public class ClearSpeakerFragment extends SettingsBasePreferenceFragment implements
-        Preference.OnPreferenceChangeListener {
+public class ClearSpeakerFragment extends Fragment {
 
-    private static final String TAG = ClearSpeakerFragment.class.getSimpleName();
+    private static final String TAG = "ClearSpeakerFragment";
+    private static final int PLAY_DURATION_MS = 30000;
 
-    private static final String PREF_CLEAR_SPEAKER = "clear_speaker_pref";
-
-    private AudioManager mAudioManager;
-    private Handler mHandler;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private MediaPlayer mMediaPlayer;
-    private TwoStatePreference mClearSpeakerPref;
+    private AudioManager mAudioManager;
+    private ImageButton mActionButton;
+    private boolean mPlaying;
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.clear_speaker_settings, rootKey);
-
-        mClearSpeakerPref = (TwoStatePreference) findPreference(PREF_CLEAR_SPEAKER);
-        mClearSpeakerPref.setOnPreferenceChangeListener(this);
-
-        mHandler = new Handler();
-        mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.clear_speaker_layout, container, false);
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mClearSpeakerPref) {
-            boolean value = (Boolean) newValue;
-            if (value) {
-                if (startPlaying()) {
-                    mHandler.removeCallbacksAndMessages(null);
-                    mHandler.postDelayed(() -> {
-                        stopPlaying();
-                    }, 30000);
-                    return true;
-                }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mAudioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
+        mActionButton = view.findViewById(R.id.clear_speaker_action);
+        mActionButton.setOnClickListener(v -> {
+            if (mPlaying) {
+                stopPlaying();
+            } else if (startPlaying()) {
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.postDelayed(this::stopPlaying, PLAY_DURATION_MS);
             }
-        }
-        return false;
+        });
+        updateButton();
     }
 
     @Override
     public void onStop() {
-        super.onStop();
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
         stopPlaying();
+        super.onStop();
     }
 
-    public boolean startPlaying() {
-        mAudioManager.setParameters("status_earpiece_clean=on");
-        mMediaPlayer = new MediaPlayer();
-        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMediaPlayer.setLooping(true);
-        try {
-            AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.clear_speaker_sound);
-            try {
-                mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-            } finally {
-                file.close();
+    private boolean startPlaying() {
+        if (mAudioManager != null) {
+            mAudioManager.setParameters("status_earpiece_clean=on");
+        }
+        requireActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        MediaPlayer player = new MediaPlayer();
+        player.setAudioAttributes(new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build());
+        player.setLooping(true);
+        player.setOnErrorListener((mediaPlayer, what, extra) -> {
+            stopPlaying();
+            return true;
+        });
+
+        try (AssetFileDescriptor afd = getResources().openRawResourceFd(
+                R.raw.clear_speaker_sound)) {
+            player.setDataSource(afd);
+            player.setVolume(1.0f, 1.0f);
+            player.prepare();
+            player.start();
+            mMediaPlayer = player;
+            mPlaying = true;
+            updateButton();
+            return true;
+        } catch (IOException | IllegalArgumentException | IllegalStateException e) {
+            Log.e(TAG, "Failed to play speaker clean sound", e);
+            if (mAudioManager != null) {
+                mAudioManager.setParameters("status_earpiece_clean=off");
             }
-            mClearSpeakerPref.setEnabled(false);
-            mMediaPlayer.setVolume(1.0f, 1.0f);
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to play speaker clean sound!", ioe);
+            player.release();
             return false;
         }
-        return true;
     }
 
-    public void stopPlaying() {
+    private void stopPlaying() {
+        mHandler.removeCallbacksAndMessages(null);
         if (mMediaPlayer != null) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.stop();
-                mMediaPlayer.reset();
+            try {
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "Failed to stop speaker clean sound", e);
+            } finally {
                 mMediaPlayer.release();
-                mMediaPlayer=null;
+                mMediaPlayer = null;
             }
         }
-        mAudioManager.setParameters("status_earpiece_clean=off");
-        mClearSpeakerPref.setEnabled(true);
-        mClearSpeakerPref.setChecked(false);
+        if (mAudioManager != null) {
+            mAudioManager.setParameters("status_earpiece_clean=off");
+        }
+        mPlaying = false;
+        updateButton();
+    }
+
+    private void updateButton() {
+        if (mActionButton == null) {
+            return;
+        }
+        mActionButton.setImageResource(mPlaying ? R.drawable.ic_pause : R.drawable.ic_play);
+        mActionButton.setContentDescription(getString(mPlaying
+                ? R.string.clear_speaker_stop : R.string.clear_speaker_start));
     }
 }

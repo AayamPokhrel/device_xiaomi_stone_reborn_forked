@@ -33,6 +33,7 @@
 
     <application
         android:label="@string/device_settings_app_name"
+        android:supportsRtl="true"
         android:defaultToDeviceProtectedStorage="true"
         android:directBootAware="true"
         android:theme="@style/Theme.SubSettingsBase.Expressive">

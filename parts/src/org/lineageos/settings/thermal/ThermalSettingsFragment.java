@@ -1,44 +1,47 @@
 /**
  * Copyright (C) 2020 The LineageOS Project
- * <p>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.lineageos.settings.thermal;
 
 import android.annotation.Nullable;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.util.TypedValue;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SectionIndexer;
-import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.settingslib.applications.ApplicationsState;
 
@@ -46,35 +49,50 @@ import org.lineageos.settings.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 public class ThermalSettingsFragment extends Fragment
         implements ApplicationsState.Callbacks {
+
+    private static final int[] MODE_LABELS = {
+            R.string.thermal_default,
+            R.string.thermal_benchmark,
+            R.string.thermal_browser,
+            R.string.thermal_camera,
+            R.string.thermal_dialer,
+            R.string.thermal_gaming,
+            R.string.thermal_navigation,
+            R.string.thermal_streaming,
+            R.string.thermal_video
+    };
 
     private AllPackagesAdapter mAllPackagesAdapter;
     private ApplicationsState mApplicationsState;
     private ApplicationsState.Session mSession;
     private ActivityFilter mActivityFilter;
-    private Map<String, ApplicationsState.AppEntry> mEntryMap =
-            new HashMap<String, ApplicationsState.AppEntry>();
 
     private ThermalUtils mThermalUtils;
     private RecyclerView mAppsRecyclerView;
+    private View mSearchContainer;
+    private EditText mSearchInput;
+    private ImageButton mSearchClear;
+    private View mEnabledContainer;
+    private Switch mEnabledSwitch;
+    private TextView mEnabledSummary;
+    private boolean mProfilesEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mApplicationsState = ApplicationsState.getInstance(getActivity().getApplication());
+        mApplicationsState = ApplicationsState.getInstance(requireActivity().getApplication());
         mSession = mApplicationsState.newSession(this);
         mSession.onResume();
-        mActivityFilter = new ActivityFilter(getActivity().getPackageManager());
+        mActivityFilter = new ActivityFilter(requireActivity().getPackageManager());
 
-        mAllPackagesAdapter = new AllPackagesAdapter(getActivity());
-
-        mThermalUtils = new ThermalUtils(getActivity());
+        mAllPackagesAdapter = new AllPackagesAdapter();
+        mThermalUtils = new ThermalUtils(requireContext());
     }
 
     @Override
@@ -88,22 +106,32 @@ public class ThermalSettingsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         mAppsRecyclerView = view.findViewById(R.id.thermal_rv_view);
-        mAppsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAppsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mAppsRecyclerView.setAdapter(mAllPackagesAdapter);
-    }
 
+        mSearchContainer = view.findViewById(R.id.thermal_search_container);
+        mSearchInput = view.findViewById(R.id.thermal_search);
+        mSearchClear = view.findViewById(R.id.thermal_search_clear);
+        mEnabledContainer = view.findViewById(R.id.thermal_enabled_container);
+        mEnabledSwitch = view.findViewById(R.id.thermal_enabled);
+        mEnabledSummary = view.findViewById(R.id.thermal_enabled_summary);
+
+        setupProfilesToggle();
+        setupSearch();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(getResources().getString(R.string.thermal_title));
+        requireActivity().setTitle(getString(R.string.thermal_title));
+        mProfilesEnabled = ThermalUtils.isServiceEnabled(requireContext());
+        updateProfilesState(mProfilesEnabled, false);
         rebuild();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         mSession.onPause();
         mSession.onDestroy();
     }
@@ -116,9 +144,8 @@ public class ThermalSettingsFragment extends Fragment
 
     @Override
     public void onRebuildComplete(ArrayList<ApplicationsState.AppEntry> entries) {
-        if (entries != null) {
-            handleAppEntries(entries);
-            mAllPackagesAdapter.notifyDataSetChanged();
+        if (entries != null && isAdded()) {
+            mAllPackagesAdapter.setEntries(entries);
         }
     }
 
@@ -147,151 +174,116 @@ public class ThermalSettingsFragment extends Fragment
     public void onRunningStateChanged(boolean running) {
     }
 
-    private void handleAppEntries(List<ApplicationsState.AppEntry> entries) {
-        final ArrayList<String> sections = new ArrayList<String>();
-        final ArrayList<Integer> positions = new ArrayList<Integer>();
-        final PackageManager pm = getActivity().getPackageManager();
-        String lastSectionIndex = null;
-        int offset = 0;
-
-        for (int i = 0; i < entries.size(); i++) {
-            final ApplicationInfo info = entries.get(i).info;
-            final String label = (String) info.loadLabel(pm);
-            final String sectionIndex;
-
-            if (!info.enabled) {
-                sectionIndex = "--"; // XXX
-            } else if (TextUtils.isEmpty(label)) {
-                sectionIndex = "";
-            } else {
-                sectionIndex = label.substring(0, 1).toUpperCase();
-            }
-
-            if (lastSectionIndex == null ||
-                    !TextUtils.equals(sectionIndex, lastSectionIndex)) {
-                sections.add(sectionIndex);
-                positions.add(offset);
-                lastSectionIndex = sectionIndex;
-            }
-
-            offset++;
-        }
-
-        mAllPackagesAdapter.setEntries(entries, sections, positions);
-        mEntryMap.clear();
-        for (ApplicationsState.AppEntry e : entries) {
-            mEntryMap.put(e.info.packageName, e);
-        }
-    }
-
     private void rebuild() {
         mSession.rebuild(mActivityFilter, ApplicationsState.ALPHA_COMPARATOR);
     }
 
-    private int getStateDrawable(int state) {
-        switch (state) {
-            case ThermalUtils.STATE_BENCHMARK:
-                return R.drawable.ic_thermal_benchmark;
-            case ThermalUtils.STATE_BROWSER:
-                return R.drawable.ic_thermal_browser;
-            case ThermalUtils.STATE_CAMERA:
-                return R.drawable.ic_thermal_camera;
-            case ThermalUtils.STATE_DIALER:
-                return R.drawable.ic_thermal_dialer;
-            case ThermalUtils.STATE_GAMING:
-                return R.drawable.ic_thermal_gaming;
-            case ThermalUtils.STATE_NAVIGATION:
-                return R.drawable.ic_thermal_navigation;
-            case ThermalUtils.STATE_STREAMING:
-                return R.drawable.ic_thermal_streaming;
-            case ThermalUtils.STATE_VIDEO:
-                return R.drawable.ic_thermal_video;
-            case ThermalUtils.STATE_DEFAULT:
-            default:
-                return R.drawable.ic_thermal_default;
+    private void setupProfilesToggle() {
+        mProfilesEnabled = ThermalUtils.isServiceEnabled(requireContext());
+        mEnabledSwitch.setChecked(mProfilesEnabled);
+        updateProfilesState(mProfilesEnabled, false);
+
+        mEnabledContainer.setOnClickListener(v -> mEnabledSwitch.toggle());
+        mEnabledSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mProfilesEnabled == isChecked) {
+                return;
+            }
+            updateProfilesState(isChecked, true);
+        });
+    }
+
+    private void updateProfilesState(boolean enabled, boolean persist) {
+        mProfilesEnabled = enabled;
+        if (mEnabledSwitch != null && mEnabledSwitch.isChecked() != enabled) {
+            mEnabledSwitch.setChecked(enabled);
         }
+        if (mEnabledSummary != null) {
+            mEnabledSummary.setText(enabled
+                    ? R.string.thermal_enable_summary
+                    : R.string.thermal_disabled_summary);
+        }
+        if (mSearchContainer != null) {
+            mSearchContainer.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        }
+        if (!enabled && mSearchInput != null) {
+            mSearchInput.setText("");
+        }
+        if (persist) {
+            ThermalUtils.setServiceEnabled(requireContext(), enabled);
+        }
+        if (mAllPackagesAdapter != null) {
+            mAllPackagesAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setupSearch() {
+        mSearchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int count, int after) {
+                String query = s == null ? "" : s.toString();
+                mSearchClear.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                mAllPackagesAdapter.filter(query);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        mSearchClear.setOnClickListener(v -> mSearchInput.setText(""));
+    }
+
+    private int clampState(int state) {
+        return Math.max(0, Math.min(state, MODE_LABELS.length - 1));
+    }
+
+    private void showModeDialog(ApplicationsState.AppEntry entry, int selectedState) {
+        final String[] labels = new String[MODE_LABELS.length];
+        for (int i = 0; i < MODE_LABELS.length; i++) {
+            labels[i] = getString(MODE_LABELS[i]);
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.thermal_profile_dialog_title, entry.label))
+                .setSingleChoiceItems(labels, selectedState, (dialog, which) -> {
+                    if (mProfilesEnabled && which != selectedState) {
+                        mThermalUtils.writePackage(entry.info.packageName, which);
+                        int position = mAllPackagesAdapter.indexOf(entry);
+                        if (position >= 0) {
+                            mAllPackagesAdapter.notifyItemChanged(position);
+                        }
+                    }
+                    dialog.dismiss();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
-        private Spinner mode;
-        private ImageView icon;
-        private View rootView;
-        private ImageView stateIcon;
+        private final TextView title;
+        private final TextView mode;
+        private final ImageView icon;
 
         private ViewHolder(View view) {
             super(view);
-            this.title = view.findViewById(R.id.app_name);
-            this.mode = view.findViewById(R.id.app_mode);
-            this.icon = view.findViewById(R.id.app_icon);
-            this.stateIcon = view.findViewById(R.id.state);
-            this.rootView = view;
-
-            view.setTag(this);
-        }
-    }
-
-    private class ModeAdapter extends BaseAdapter {
-
-        private final LayoutInflater inflater;
-        private final int[] items = {
-                R.string.thermal_default,
-                R.string.thermal_benchmark,
-                R.string.thermal_browser,
-                R.string.thermal_camera,
-                R.string.thermal_dialer,
-                R.string.thermal_gaming,
-                R.string.thermal_navigation,
-                R.string.thermal_streaming,
-                R.string.thermal_video
-        };
-
-        private ModeAdapter(Context context) {
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public int getCount() {
-            return items.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView view;
-            if (convertView != null) {
-                view = (TextView) convertView;
-            } else {
-                view = (TextView) inflater.inflate(android.R.layout.simple_spinner_dropdown_item,
-                        parent, false);
-            }
-
-            view.setText(items[position]);
-            view.setTextSize(14f);
-
-            return view;
+            title = view.findViewById(R.id.app_name);
+            mode = view.findViewById(R.id.app_mode);
+            icon = view.findViewById(R.id.app_icon);
         }
     }
 
     private class AllPackagesAdapter extends RecyclerView.Adapter<ViewHolder>
-            implements AdapterView.OnItemSelectedListener, SectionIndexer {
+            implements SectionIndexer {
 
-        private List<ApplicationsState.AppEntry> mEntries = new ArrayList<>();
-        private String[] mSections;
-        private int[] mPositions;
-
-        public AllPackagesAdapter(Context context) {
-            mActivityFilter = new ActivityFilter(context.getPackageManager());
-        }
+        private final List<ApplicationsState.AppEntry> mAllEntries = new ArrayList<>();
+        private final List<ApplicationsState.AppEntry> mEntries = new ArrayList<>();
+        private String[] mSections = new String[0];
+        private int[] mPositions = new int[0];
+        private String mQuery = "";
 
         @Override
         public int getItemCount() {
@@ -306,56 +298,78 @@ public class ThermalSettingsFragment extends Fragment
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            ViewHolder holder = new ViewHolder(LayoutInflater.from(parent.getContext())
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.thermal_list_item, parent, false));
-            Context context = holder.itemView.getContext();
-            holder.mode.setAdapter(new ModeAdapter(context));
-            holder.mode.setOnItemSelectedListener(this);
-            return holder;
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ApplicationsState.AppEntry entry = mEntries.get(position);
-
-            if (entry == null) {
-                return;
-            }
+            int packageState = mProfilesEnabled ? clampState(
+                    mThermalUtils.getStateForPackage(entry.info.packageName))
+                    : ThermalUtils.STATE_DEFAULT;
 
             holder.title.setText(entry.label);
-            holder.title.setOnClickListener(v -> holder.mode.performClick());
             mApplicationsState.ensureIcon(entry);
             holder.icon.setImageDrawable(entry.icon);
-            int packageState = mThermalUtils.getStateForPackage(entry.info.packageName);
-            holder.mode.setSelection(packageState, false);
-            holder.mode.setTag(entry);
-            holder.stateIcon.setImageResource(getStateDrawable(packageState));
+            holder.mode.setText(MODE_LABELS[packageState]);
+            holder.mode.setEnabled(mProfilesEnabled);
+            holder.mode.setOnClickListener(v -> {
+                if (mProfilesEnabled) {
+                    showModeDialog(entry, packageState);
+                }
+            });
+            holder.title.setOnClickListener(v -> holder.mode.performClick());
         }
 
-        private void setEntries(List<ApplicationsState.AppEntry> entries,
-                                List<String> sections, List<Integer> positions) {
-            mEntries = entries;
-            mSections = sections.toArray(new String[sections.size()]);
+        private void setEntries(List<ApplicationsState.AppEntry> entries) {
+            mAllEntries.clear();
+            mAllEntries.addAll(entries);
+            filter(mQuery);
+        }
+
+        private void filter(String query) {
+            mQuery = query == null ? "" : query.trim();
+            String normalizedQuery = mQuery.toLowerCase(Locale.getDefault());
+            mEntries.clear();
+
+            for (ApplicationsState.AppEntry entry : mAllEntries) {
+                String label = entry.label == null ? "" : entry.label.toString();
+                if (normalizedQuery.isEmpty()
+                        || label.toLowerCase(Locale.getDefault()).contains(normalizedQuery)) {
+                    mEntries.add(entry);
+                }
+            }
+
+            rebuildSections();
+            notifyDataSetChanged();
+        }
+
+        private void rebuildSections() {
+            ArrayList<String> sections = new ArrayList<>();
+            ArrayList<Integer> positions = new ArrayList<>();
+            String lastSection = null;
+
+            for (int i = 0; i < mEntries.size(); i++) {
+                String label = String.valueOf(mEntries.get(i).label);
+                String section = TextUtils.isEmpty(label)
+                        ? "" : label.substring(0, 1).toUpperCase(Locale.getDefault());
+                if (!TextUtils.equals(section, lastSection)) {
+                    sections.add(section);
+                    positions.add(i);
+                    lastSection = section;
+                }
+            }
+
+            mSections = sections.toArray(new String[0]);
             mPositions = new int[positions.size()];
             for (int i = 0; i < positions.size(); i++) {
                 mPositions[i] = positions.get(i);
             }
-            notifyDataSetChanged();
         }
 
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            final ApplicationsState.AppEntry entry = (ApplicationsState.AppEntry) parent.getTag();
-            int currentState = mThermalUtils.getStateForPackage(entry.info.packageName);
-            if (currentState != position) {
-                mThermalUtils.writePackage(entry.info.packageName, position);
-                notifyDataSetChanged();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
+        private int indexOf(ApplicationsState.AppEntry entry) {
+            return mEntries.indexOf(entry);
         }
 
         @Override
@@ -363,7 +377,6 @@ public class ThermalSettingsFragment extends Fragment
             if (section < 0 || section >= mSections.length) {
                 return -1;
             }
-
             return mPositions[section];
         }
 
@@ -372,17 +385,7 @@ public class ThermalSettingsFragment extends Fragment
             if (position < 0 || position >= getItemCount()) {
                 return -1;
             }
-
             final int index = Arrays.binarySearch(mPositions, position);
-
-            /*
-             * Consider this example: section positions are 0, 3, 5; the supplied
-             * position is 4. The section corresponding to position 4 starts at
-             * position 3, so the expected return value is 1. Binary search will not
-             * find 4 in the array and thus will return -insertPosition-1, i.e. -3.
-             * To get from that number to the expected value of 1 we need to negate
-             * and subtract 2.
-             */
             return index >= 0 ? index : -index - 2;
         }
 
@@ -392,26 +395,25 @@ public class ThermalSettingsFragment extends Fragment
         }
     }
 
-    private class ActivityFilter implements ApplicationsState.AppFilter {
+    private static class ActivityFilter implements ApplicationsState.AppFilter {
 
         private final PackageManager mPackageManager;
-        private final List<String> mLauncherResolveInfoList = new ArrayList<String>();
+        private final List<String> mLauncherResolveInfoList = new ArrayList<>();
 
         private ActivityFilter(PackageManager packageManager) {
-            this.mPackageManager = packageManager;
-
+            mPackageManager = packageManager;
             updateLauncherInfoList();
         }
 
-        public void updateLauncherInfoList() {
-            Intent i = new Intent(Intent.ACTION_MAIN);
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> resolveInfoList = mPackageManager.queryIntentActivities(i, 0);
+        private void updateLauncherInfoList() {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> resolveInfoList = mPackageManager.queryIntentActivities(intent, 0);
 
             synchronized (mLauncherResolveInfoList) {
                 mLauncherResolveInfoList.clear();
-                for (ResolveInfo ri : resolveInfoList) {
-                    mLauncherResolveInfoList.add(ri.activityInfo.packageName);
+                for (ResolveInfo resolveInfo : resolveInfoList) {
+                    mLauncherResolveInfoList.add(resolveInfo.activityInfo.packageName);
                 }
             }
         }
@@ -422,13 +424,9 @@ public class ThermalSettingsFragment extends Fragment
 
         @Override
         public boolean filterApp(ApplicationsState.AppEntry entry) {
-            boolean show = !mAllPackagesAdapter.mEntries.contains(entry.info.packageName);
-            if (show) {
-                synchronized (mLauncherResolveInfoList) {
-                    show = mLauncherResolveInfoList.contains(entry.info.packageName);
-                }
+            synchronized (mLauncherResolveInfoList) {
+                return mLauncherResolveInfoList.contains(entry.info.packageName);
             }
-            return show;
         }
     }
 }
