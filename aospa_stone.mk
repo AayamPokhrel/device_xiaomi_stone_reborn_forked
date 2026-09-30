@@ -61,4 +61,3 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceProduct=sunstone
 
 endif
-

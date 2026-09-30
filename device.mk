@@ -14,9 +14,6 @@ TARGET_COMMON_QTI_COMPONENTS += telephony
 include vendor/qcom/opensource/core-utils/build/utils.mk
 $(call inherit-product, device/qcom/common/common.mk)
 
-# telephony
-PRODUCT_SYSTEM_EXT_PROPERTIES := $(filter-out ro.telephony.default_network=%, $(PRODUCT_SYSTEM_EXT_PROPERTIES))
-
 # Release config map
 PRODUCT_RELEASE_CONFIG_MAPS += $(LOCAL_PATH)/release/release_config_map.textproto
 
@@ -456,8 +453,7 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/interfaces \
     hardware/qcom/display \
     hardware/qcom/wlan/qcwcn \
-    hardware/xiaomi \
-    vendor/qcom/opensource/data-ipa-cfg-mgr-legacy
+    hardware/xiaomi
 
 # Telephony
 PRODUCT_PACKAGES += \
@@ -521,18 +517,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.bpf.kver_override=5.10.239
 
 # Inherit from proprietary targets
-$(call inclearherit-product, vendor/xiaomi/stone/stone-vendor.mk)
-
-# IPACM legacy
-PRODUCT_PACKAGES := $(filter-out ipacm ipacm.rc IPACM_cfg.xml IPACM_Filter_cfg.xml liboffloadhal libipanat libnfnetlink libnetfilter_conntrack,$(PRODUCT_PACKAGES))
+$(call inherit-product, vendor/xiaomi/stone/stone-vendor.mk)
 
 PRODUCT_PACKAGES += \
     android.hardware.tetheroffload.config@1.0.vendor \
     android.hardware.tetheroffload.control@1.0.vendor
-
-PRODUCT_COPY_FILES += \
-    vendor/xiaomi/stone/proprietary/vendor/bin/ipacm:$(TARGET_COPY_OUT_VENDOR)/bin/ipacm \
-    vendor/xiaomi/stone/proprietary/vendor/lib64/liboffloadhal.so:$(TARGET_COPY_OUT_VENDOR)/lib64/liboffloadhal.so \
-    vendor/xiaomi/stone/proprietary/vendor/lib64/libipanat.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libipanat.so \
-    vendor/xiaomi/stone/proprietary/vendor/lib64/libnfnetlink.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libnfnetlink.so \
-    vendor/xiaomi/stone/proprietary/vendor/lib64/libnetfilter_conntrack.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libnetfilter_conntrack.so

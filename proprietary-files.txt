@@ -909,16 +909,6 @@ vendor/lib64/vendor.qti.ims.rcsconfig@2.1.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0-service-Impl.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0.so;MODULE_SUFFIX=_vendor
 
-# IPA / tether offload
-vendor/bin/ipacm
-vendor/etc/IPACM_cfg.xml
-vendor/etc/init/ipacm.rc
-vendor/lib64/liboffloadhal.so
-vendor/lib64/libipanat.so
-vendor/lib64/libnfnetlink.so
-vendor/lib64/libnetfilter_conntrack.so
-system/lib64/libxml2.so
-
 # IRQ balance
 vendor/bin/msm_irqbalance
 vendor/etc/msm_irqbalance.conf
@@ -1232,6 +1222,12 @@ vendor/etc/sensors/config/strait_qrd_lsm6dst_0.json
 vendor/etc/sensors/config/strait_qrd_tmd2725.json
 vendor/etc/sensors/config/strait_tmd2725.json
 vendor/etc/sensors/sns_reg_config
+
+# ServiceTracker
+vendor/bin/hw/vendor.qti.hardware.servicetracker@1.2-service
+vendor/etc/init/vendor.qti.hardware.servicetracker@1.2-service.rc
+vendor/etc/vintf/manifest/vendor.qti.hardware.servicetracker@1.2-service.xml
+vendor/lib64/hw/vendor.qti.hardware.servicetracker@1.2-impl.so
 
 # Snapdragon Computer Vision Engine
 vendor/lib64/libcvp_common.so
