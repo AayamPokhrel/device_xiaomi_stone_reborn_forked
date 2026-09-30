@@ -1,4 +1,4 @@
-# All unpinned blobs below are extracted from sunstone:14/OS2.0.1.0.UMQMIXM:user/release-keys
+# All unpinned blobs below are extracted from sunstone:14/OS2.0.9.0.UMQEUXM:user/release-keys
 
 # ACDB
 vendor/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb
@@ -908,6 +908,16 @@ vendor/lib64/vendor.qti.ims.rcsconfig@2.0.so
 vendor/lib64/vendor.qti.ims.rcsconfig@2.1.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0-service-Impl.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0.so;MODULE_SUFFIX=_vendor
+
+# IPA / tether offload
+vendor/bin/ipacm
+vendor/etc/IPACM_cfg.xml
+vendor/etc/init/ipacm.rc
+vendor/lib64/liboffloadhal.so
+vendor/lib64/libipanat.so
+vendor/lib64/libnfnetlink.so
+vendor/lib64/libnetfilter_conntrack.so
+system/lib64/libxml2.so
 
 # IRQ balance
 vendor/bin/msm_irqbalance
