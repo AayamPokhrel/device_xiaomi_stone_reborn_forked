@@ -33,9 +33,9 @@ PRODUCT_PACKAGES += \
     Camelot \
     Recorder
 
-# GrapheneOS Camera
-PRODUCT_PACKAGES += \
-    Camera
+
+# Graphene apps
+TARGET_BUILD_GRAPHENEAPPS := true
 
 PRODUCT_PACKAGES_REMOVE += \
     Aperture
