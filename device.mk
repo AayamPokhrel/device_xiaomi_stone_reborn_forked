@@ -456,16 +456,7 @@ PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/data-ipa-cfg-mgr-legacy
 
 # Telephony
-# extphonelib and qti-telephony-* from vendor/codeaurora/commonsys/telephony.
-# XML permission files are auto-installed by each module; listing them again
-# in PRODUCT_PACKAGES creates duplicate kati install rules.
 PRODUCT_PACKAGES += \
-    extphonelib \
-    extphonelib-product \
-    qti-telephony-hidl-wrapper \
-    qti-telephony-hidl-wrapper-prd \
-    qti-telephony-utils \
-    qti-telephony-utils-prd \
     xiaomi-telephony-stub
 
 PRODUCT_BOOT_JARS += \
@@ -521,9 +512,3 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # Inherit from proprietary targets
 $(call inherit-product, vendor/xiaomi/stone/stone-vendor.mk)
-
-# CLO's ExtPhone client includes queryNrIcon(), but the Android 14 QtiTelephony
-# app does not implement it. SystemUI calls it on every ExtTelephony connection,
-# crashing the com.qti.phone process and causing a rapid restart loop. Use the
-# platform telephony path until a matching ExtPhone service is available.
-PRODUCT_PACKAGES -= QtiTelephony
