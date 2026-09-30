@@ -8,7 +8,7 @@ ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 
 # Set network mode to (NR_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA) for DSDS
-ro.telephony.default_network=26,26
+ro.telephony.default_network=33,33
 telephony.lteOnCdmaDevice=1
 persist.vendor.radio.atfwd.start=true
 
