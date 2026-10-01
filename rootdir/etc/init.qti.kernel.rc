@@ -88,9 +88,15 @@ on boot
     chown root system /sys/kernel/dload/dload_mode
     chmod 0660 /sys/kernel/dload/dload_mode
 
-    # set the io-scheduler to kyber on all mq support devices
-    write /sys/block/sda/queue/scheduler kyber
-    write /sys/block/sdb/queue/scheduler kyber
+    # set the io-scheduler to bfq on all mq support devices
+    write /sys/block/sda/queue/scheduler bfq
+    write /sys/block/sdb/queue/scheduler bfq
+
+    # Optimize UFS read-ahead and reduce CPU overhead
+    write /sys/block/sda/queue/read_ahead_kb 128
+    write /sys/block/sda/queue/iostats 0
+    write /sys/block/sdb/queue/read_ahead_kb 128
+    write /sys/block/sdb/queue/iostats 0
 
 on post-fs-data
     # Create directory used for dump collection

@@ -73,7 +73,7 @@ function configure_zram_parameters() {
         if [ -n "$zramComp" ] && grep -q "$zramComp" /sys/block/zram0/comp_algorithm; then
             echo "$zramComp" > /sys/block/zram0/comp_algorithm
         else
-            echo "lz4" > /sys/block/zram0/comp_algorithm
+            echo "zstd" > /sys/block/zram0/comp_algorithm
         fi
 
         if [ -f /sys/block/zram0/use_dedup ]; then
@@ -118,23 +118,26 @@ function configure_memory_parameters() {
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 echo 1324800 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
 echo 80      > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
+echo 500 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
+echo 2000 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
 
 # configure governor settings for gold cluster
 echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
 echo 1401600 > /sys/devices/system/cpu/cpufreq/policy6/schedutil/hispeed_freq
 echo 85      > /sys/devices/system/cpu/cpufreq/policy6/schedutil/hispeed_load
+echo 500 > /sys/devices/system/cpu/cpufreq/policy6/schedutil/up_rate_limit_us
+echo 2000 > /sys/devices/system/cpu/cpufreq/policy6/schedutil/down_rate_limit_us
 
 echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 
 echo 35 > /proc/sys/kernel/sched_min_task_util_for_boost
 echo 35 > /proc/sys/kernel/sched_min_task_util_for_colocation
 
-for cpu in 0 1 2 3 4 5; do
-  echo -3 > /sys/devices/system/cpu/cpu${cpu}/sched_load_boost
-done
-for cpu in 6 7; do
-  echo 5 > /sys/devices/system/cpu/cpu${cpu}/sched_load_boost
-done
+# GPU Optimizations
+if [ -d /sys/class/kgsl/kgsl-3d0 ]; then
+    echo "msm-adreno-tz" > /sys/class/kgsl/kgsl-3d0/devfreq/governor
+    echo 64 > /sys/class/kgsl/kgsl-3d0/idle_timer
+fi
 
 configure_memory_parameters
 
