@@ -19,6 +19,22 @@ void vendor_load_properties() {
             "_blair",
             "POCO/moonstone_p_global/moonstone:14/UKQ1.231003.002/V816.0.25.0.UMPMIXM:user/release-keys"
         },
+        { //MOONSTONE_GLOBAL_ALT
+            "moonstone_global",
+            "POCO",
+            "moonstone",
+            "POCO X5 5G",
+            "_blair",
+            "POCO/moonstone_p_global/moonstone:14/UKQ1.231003.002/V816.0.25.0.UMPMIXM:user/release-keys"
+        },
+        { //MOONSTONE (Fallback)
+            "moonstone",
+            "POCO",
+            "moonstone",
+            "POCO X5 5G",
+            "_blair",
+            "POCO/moonstone_p_global/moonstone:14/UKQ1.231003.002/V816.0.25.0.UMPMIXM:user/release-keys"
+        },
         { //MOONSTONE_IN
             "moonstone_p_in",
             "POCO",
@@ -29,6 +45,14 @@ void vendor_load_properties() {
         },
         { //SUNSTONE_CN
             "sunstone_cn",
+            "Redmi",
+            "sunstone",
+            "Redmi Note 12 5G",
+            "_blair_lite",
+            "Redmi/sunstone/sunstone:14/UKQ1.240624.001/OS2.0.6.0.UMQCNXM:user/release-keys"
+        },
+        { //SUNSTONE (Fallback)
+            "sunstone",
             "Redmi",
             "sunstone",
             "Redmi Note 12 5G",

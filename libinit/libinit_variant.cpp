@@ -14,6 +14,12 @@ using android::base::GetProperty;
 
 void search_variant(const std::vector<variant_info_t>& variants) {
     std::string sku_value = GetProperty("ro.boot.product.hardware.sku", "");
+    if (sku_value.empty()) {
+        sku_value = GetProperty("ro.boot.hwname", "");
+    }
+    if (sku_value.empty()) {
+        sku_value = GetProperty("ro.boot.hwc", "");
+    }
 
     for (const auto& variant : variants) {
         if ((variant.sku_value == "" || variant.sku_value == sku_value)) {
