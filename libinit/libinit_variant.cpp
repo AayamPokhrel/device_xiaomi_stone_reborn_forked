@@ -22,7 +22,7 @@ void search_variant(const std::vector<variant_info_t>& variants) {
     }
 
     for (const auto& variant : variants) {
-        if ((variant.sku_value == "" || variant.sku_value == sku_value)) {
+        if ((variant.sku_value == "" || sku_value.find(variant.sku_value) != std::string::npos)) {
             set_variant_props(variant);
             break;
         }
