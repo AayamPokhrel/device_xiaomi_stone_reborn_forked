@@ -24,4 +24,7 @@
 
     <!-- Default setting for Settings.Global.MOBILE_DATA_ALWAYS_ON -->
     <bool name="def_mobile_data_always_on">false</bool>
+    <!-- Default setting for Settings.Secure.FACE_UNLOCK_KEYGUARD_ENABLED -->
+    <bool name="def_face_unlock_keyguard_enabled">true</bool>
+
 </resources>
